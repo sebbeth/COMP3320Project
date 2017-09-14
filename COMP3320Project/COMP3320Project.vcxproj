@@ -154,8 +154,6 @@
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="modelLoading.frag" />
-    <None Include="modelLoading.vs" />
     <None Include="shaders\core.frag" />
     <None Include="shaders\core.vs" />
   </ItemGroup>

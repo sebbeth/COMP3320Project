@@ -191,10 +191,9 @@ int main() {
 	SOIL_free_image_data(image);
 	glUniform1i(glGetUniformLocation(ourShader.Program, "texture0"), 0);
 
-
-	Shader shader("shaders/modelLoading.vs", "shaders/core.frag");
-
 	Model ourModel("models/Carriage.obj");
+	Model ourModel2("models/House.obj");
+	Model ourModel3("models/Hill.obj");
 
 	glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
@@ -214,18 +213,37 @@ int main() {
 		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		shader.Use();
+		ourShader.Use();
 
 		glm::mat4 view = camera.GetViewMatrix();
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 		// Draw the loaded model
 		glm::mat4 model;
-		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(0.005f, 0.005f, 0.005f));	// It's a bit too big for our scene, so scale it down
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		ourModel.Draw(shader);
+		model = glm::translate(model, glm::vec3(6.0f, -1.31f, -5.0f)); // Translate it down a bit so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		ourModel.Draw(ourShader);
+
+		glm::mat4 model4;
+		model4 = glm::translate(model4, glm::vec3(2.0f, -1.31f, 3.0f)); // Translate it down a bit so it's at the center of the scene
+		model4 = glm::scale(model4, glm::vec3(0.5f, 0.5f, 0.5f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model4));
+		ourModel.Draw(ourShader);
+
+		glm::mat4 model2;
+		model2 = glm::translate(model2, glm::vec3(-6.0f, -0.4f, 0.0f)); // Translate it down a bit so it's at the center of the scene
+		model2 = glm::scale(model2, glm::vec3(0.35f, 0.35f, 0.35f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model2));
+		ourModel2.Draw(ourShader);
+
+		glm::mat4 model5;
+		model5 = glm::translate(model5, glm::vec3(-6.0f, -3.05f, 0.0f)); // Translate it down a bit so it's at the center of the scene
+		model5 = glm::scale(model5, glm::vec3(0.35f, 0.35f, 0.35f));	// It's a bit too big for our scene, so scale it down
+		model5 = glm::rotate(model5, 180.0f, glm::vec3(0.0f, 1.0f, 0.0f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model5));
+		ourModel3.Draw(ourShader);
 
 
 
@@ -234,7 +252,7 @@ int main() {
 		//glBindTexture(GL_TEXTURE_2D, textures[1]);
 		//glUniform1i(glGetUniformLocation(ourShader.Program, "texture1"), 1);
 
-		ourShader.Use();
+		//ourShader.Use();
 
 		//glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
@@ -261,10 +279,10 @@ int main() {
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-		glm::mat4 model2;
-		model2 = glm::translate(model2, cubePositions[10]);
+		glm::mat4 model3;
+		model3 = glm::translate(model3, cubePositions[10]);
 		//model2 = glm::scale(model2, glm::vec3(30.0f, 1.0f, 30.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model2));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model3));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glBindVertexArray(0);
