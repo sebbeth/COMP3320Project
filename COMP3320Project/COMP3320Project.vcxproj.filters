@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{73e4afe7-ed3e-4fea-bd03-f3b8620df666}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\models">
+      <UniqueIdentifier>{445ff850-8d6d-4536-9e47-6555bd554012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,12 +32,24 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core.vs">
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="shaders\core.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="modelLoading.vs">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="modelLoading.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
