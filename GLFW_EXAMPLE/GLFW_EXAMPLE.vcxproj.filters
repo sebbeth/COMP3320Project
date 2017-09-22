@@ -25,10 +25,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.frag">
+    <None Include="shaders\core.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shader.vert">
+    <None Include="shaders\core.vs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

@@ -35,7 +35,7 @@
 #include "Camera.h"
 #include "Model.h"
 
-const GLint WIDTH = 800, HEIGHT = 600;
+const GLint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 //Camera Movement
