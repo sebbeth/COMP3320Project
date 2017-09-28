@@ -34,6 +34,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Model.h"
+#include "LevelData.h"
 
 const GLint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
@@ -107,11 +108,18 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBindVertexArray(0);
+	
 
 	//Load .obj models
-	Model carriageModel("models/Carriage.obj");
-	Model houseModel("models/House.obj");
-	Model terrainModel("models/hill1.obj");
+	//Model carriageModel("models/Carriage.obj");
+	//Model houseModel("models/House.obj");
+	//Model terrainModel("models/hill1.obj");
+
+
+	// Load the level data object, it contans all the data for the game's initial state.
+	LevelData levelData;
+
+	
 
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
@@ -136,35 +144,15 @@ int main() {
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-		//Draw the loaded models within the game
-		glm::mat4 model;
-		//Place the model within the environment and scale down
-		model = glm::translate(model, glm::vec3(3.0f, -4.5f, -4.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		carriageModel.Draw(ourShader);
+		//Draw all the loaded models within the game
 
-		glm::mat4 model4;
-		//Place the model within the environment and scale down
-		model4 = glm::translate(model4, glm::vec3(3.0f, -4.5f, 3.0f));
-		model4 = glm::scale(model4, glm::vec3(0.5f, 0.5f, 0.5f));
-		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model4));
-		carriageModel.Draw(ourShader);
+		for (size_t i = 0; i < 4; i++)
+		{
+			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
+			levelData.getModel(i).Draw(ourShader);
 
-		glm::mat4 model2;
-		//Place the model within the environment and scale down
-		model2 = glm::translate(model2, glm::vec3(-6.0f, -3.6f, -5.0f));
-		model2 = glm::scale(model2, glm::vec3(0.35f, 0.35f, 0.35f));
-		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model2));
-		houseModel.Draw(ourShader);
-
-		glm::mat4 model5;
-		//Place the model within the environment and scale down
-		model5 = glm::translate(model5, glm::vec3(-6.0f, -3.05f, 0.0f));
-		model5 = glm::scale(model5, glm::vec3(0.35f, 0.35f, 0.35f));
-		model5 = glm::rotate(model5, 180.0f, glm::vec3(0.0f, 1.0f, 0.0f));	
-		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model5));
-		terrainModel.Draw(ourShader);
+		}
+	
 
 		view = camera.GetViewMatrix();
 
