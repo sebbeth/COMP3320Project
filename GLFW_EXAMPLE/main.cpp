@@ -31,7 +31,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 //Include header files
-#include "Shader.h"
+#include "Shader_m.h"
 #include "Camera.h"
 #include "Model.h"
 #include "LevelData.h"
@@ -54,6 +54,9 @@ bool firstMouse = true;
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
+
+// lighting
+glm::vec3 lightPos(1.2f, 20.0f, 50.0f);
 
 int main() {
 	glfwInit();
@@ -96,24 +99,11 @@ int main() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Shader ourShader("shaders/core.vs", "shaders/core.frag");
-
-	//Vertex Buffer Objects, Vertex Array Object
-	GLuint VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glBindVertexArray(0);
-	
+	Shader ourShader("shaders/4.1.lighting_maps.vs", "shaders/4.1.lighting_maps.fs");
 
 	// Load the level data object, it contans all the data for the game's initial state.
 	LevelData levelData;
 
-	
 
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
@@ -133,6 +123,14 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		ourShader.Use();
+		ourShader.setVec3("light.position", lightPos);
+		ourShader.setVec3("viewPos", lightPos);
+
+		// light properties
+		ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
+		ourShader.setVec3("light.diffuse", 0.7f, 0.7f, 0.5f);
+		ourShader.setVec3("light.specular", 1.0f, 1.0f, 0.0f);
+
 
 		glm::mat4 view = camera.GetViewMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -142,12 +140,16 @@ int main() {
 
 		for (size_t i = 0; i < 4; i++)
 		{
+
+			// material properties
+			
+			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
+			ourShader.setFloat("material.shininess", 60.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
 			levelData.getModel(i).Draw(ourShader);
 
 		}
 	
-
 		view = camera.GetViewMatrix();
 
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
@@ -157,14 +159,11 @@ int main() {
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glBindVertexArray(VAO);
-
+	
 		//DRAW OPENGL
 		glfwSwapBuffers(window);
 	}
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
 
 	glfwTerminate();
 
