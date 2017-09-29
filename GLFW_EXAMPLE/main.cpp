@@ -45,7 +45,7 @@ void MouseCallback(GLFWwindow *window, double xPos, double yPos);
 void DoMovement();
 
 //Default Camera Variables
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 20.0f, 90.0f));
 GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
@@ -109,12 +109,6 @@ int main() {
 
 	glBindVertexArray(0);
 	
-
-	//Load .obj models
-	//Model carriageModel("models/Carriage.obj");
-	//Model houseModel("models/House.obj");
-	//Model terrainModel("models/hill1.obj");
-
 
 	// Load the level data object, it contans all the data for the game's initial state.
 	LevelData levelData;

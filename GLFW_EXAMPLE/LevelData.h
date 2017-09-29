@@ -32,26 +32,27 @@ public:
 	LevelData() {
 
 		//Ground object
-		objects[0].positioning = glm::translate(objects[0].positioning, glm::vec3(-6.0f, -3.05f, 0.0f));
-		objects[0].positioning = glm::scale(objects[0].positioning, glm::vec3(0.35f, 0.35f, 0.35f));
-		objects[0].positioning = glm::rotate(objects[0].positioning, 180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		objects[0].model.load("models/hill1.obj");
-
+	
+		objects[0].positioning = glm::translate(objects[0].positioning, glm::vec3(0.0f, 0.0f, 0.0f));
+		float scale = 4.0f;
+		objects[0].positioning = glm::scale(objects[0].positioning, glm::vec3(scale, scale, scale));
+		//objects[0].positioning = glm::rotate(objects[0].positioning, 180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		objects[0].model.load("models/mountian3.obj");
+		
 
 		// HOUSE
-		objects[3].positioning = glm::translate(objects[0].positioning, glm::vec3(-6.0f, -3.6f, -5.0f));
-		objects[3].positioning = glm::scale(objects[0].positioning, glm::vec3(0.35f, 0.35f, 0.35f));
-		
+		objects[3].positioning = glm::translate(objects[3].positioning, glm::vec3(-6.0f, 30.6f, -5.0f));
+		objects[3].positioning = glm::scale(objects[3].positioning, glm::vec3(0.35f, 0.35f, 0.35f));
 		objects[3].model.load("models/House.obj");
 
 
 		// Carriage 1
-		objects[1].positioning = glm::translate(objects[1].positioning, glm::vec3(3.0f, -4.5f, -4.0f));
+		objects[1].positioning = glm::translate(objects[1].positioning, glm::vec3(3.0f, 30.5f, -4.0f));
 		objects[1].positioning = glm::scale(objects[1].positioning, glm::vec3(0.5f, 0.5f, 0.5f));
 		objects[1].model.load("models/Carriage.obj");
 
 		// Carriage 2
-		objects[2].positioning = glm::translate(objects[2].positioning, glm::vec3(3.0f, -4.5f, 3.0f));
+		objects[2].positioning = glm::translate(objects[2].positioning, glm::vec3(3.0f, 30.5f, 3.0f));
 		objects[2].positioning = glm::scale(objects[2].positioning, glm::vec3(0.5f, 0.5f, 0.5f));
 		objects[2].model.load("models/Carriage.obj");
 

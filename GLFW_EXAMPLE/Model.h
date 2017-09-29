@@ -134,10 +134,22 @@ private:
 			vertex.Position = vector;
 
 			// Normals
-			vector.x = mesh->mNormals[i].x;
-			vector.y = mesh->mNormals[i].y;
-			vector.z = mesh->mNormals[i].z;
-			vertex.Normal = vector;
+
+			// Warning weird fix for a null pointer exception
+			
+			if (mesh->mNormals == NULL) 
+			{
+				cout << "Error getting normals for mesh" << endl;
+			} else {
+				vector.x = mesh->mNormals[i].x;
+				vector.y = mesh->mNormals[i].y;
+				vector.z = mesh->mNormals[i].z;
+				vertex.Normal = vector;
+			}
+
+		
+			
+			
 
 			// Texture Coordinates
 			if (mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?
