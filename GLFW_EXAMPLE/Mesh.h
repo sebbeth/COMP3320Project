@@ -56,6 +56,7 @@ public:
 		this->vertices = vertices;
 		this->indices = indices;
 		this->textures = textures;
+		
 
 		// Now that we have all the required data, set the vertex buffers and its attribute pointers.
 		this->setupMesh();
@@ -75,7 +76,7 @@ public:
 			stringstream ss;
 			string number;
 			string name = this->textures[i].type;
-
+				
 			if (name == "texture_diffuse")
 			{
 				ss << diffuseNr++; // Transfer GLuint to stream
@@ -106,6 +107,7 @@ public:
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+		
 	}
 
 private:

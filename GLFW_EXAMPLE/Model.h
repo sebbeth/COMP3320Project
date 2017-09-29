@@ -121,6 +121,7 @@ private:
 		vector<GLuint> indices;
 		vector<Texture> textures;
 
+
 		// Walk through each of the mesh's vertices
 		for (GLuint i = 0; i < mesh->mNumVertices; i++)
 		{
@@ -146,10 +147,6 @@ private:
 				vector.z = mesh->mNormals[i].z;
 				vertex.Normal = vector;
 			}
-
-		
-			
-			
 
 			// Texture Coordinates
 			if (mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?

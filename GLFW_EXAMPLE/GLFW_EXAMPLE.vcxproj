@@ -90,6 +90,14 @@
     <Image Include="kitten.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\2.1.basic_lighting.fs" />
+    <None Include="shaders\2.1.basic_lighting.vs" />
+    <None Include="shaders\2.1.lamp.fs" />
+    <None Include="shaders\2.1.lamp.vs" />
+    <None Include="shaders\4.1.lamp.fs" />
+    <None Include="shaders\4.1.lamp.vs" />
+    <None Include="shaders\4.1.lighting_maps.fs" />
+    <None Include="shaders\4.1.lighting_maps.vs" />
     <None Include="shaders\core.frag" />
     <None Include="shaders\core.vs" />
   </ItemGroup>
@@ -99,6 +107,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="shader_m.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

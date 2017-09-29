@@ -31,6 +31,30 @@
     <None Include="shaders\core.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\2.1.lamp.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\2.1.basic_lighting.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\2.1.basic_lighting.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\2.1.lamp.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\4.1.lamp.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\4.1.lamp.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\4.1.lighting_maps.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\4.1.lighting_maps.vs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -46,6 +70,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LevelData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_m.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
