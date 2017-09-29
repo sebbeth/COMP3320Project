@@ -10,6 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/DarkRock.png
 
 newmtl Dirt
 Ns 96.078431
@@ -20,6 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/DarkDirt.png
 
 newmtl Dirt.001
 Ns 96.078431
@@ -30,18 +32,18 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd textures/brown.png
+map_Kd textures/Dirt.png
 
 newmtl Grass
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
-Kd 0.135052 0.640000 0.023125
+Kd 0.135052 0.640000 0.023125	
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd textures/green.jpg
+map_Kd textures/Grass.png
 
 newmtl Material.007
 Ns 96.078431
@@ -52,6 +54,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/DarkRock.png
 
 newmtl Rock
 Ns 96.078431
@@ -62,6 +65,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/Rock.png
 
 newmtl Sand
 Ns 96.078431
@@ -72,6 +76,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/Sand.png
 
 newmtl Snow
 Ns 96.078431
@@ -82,7 +87,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd textures/grey.jpg
+map_Kd textures/Snow.png
 
 newmtl Tunnel
 Ns 96.078431
@@ -93,6 +98,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/Rock.png
 
 newmtl Water
 Ns 96.078431
@@ -103,6 +109,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/Water.png
 
 newmtl Water.001
 Ns 96.078431
@@ -113,3 +120,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd textures/Water.png
+
