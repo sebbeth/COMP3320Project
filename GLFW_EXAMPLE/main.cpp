@@ -50,6 +50,7 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
+bool startSequence = true;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
@@ -106,6 +107,12 @@ int main() {
 
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
+
+	// Camera fly in sequence
+	if (startSequence)
+	{
+		camera.startFlyIn();
+	}
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -182,6 +189,13 @@ void DoMovement() {
 	}
 	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) {
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	}
+
+	// Camera fly in sequence
+	if (startSequence)
+	{
+		camera.updateFlyIn(deltaTime);
+
 	}
 }
 
