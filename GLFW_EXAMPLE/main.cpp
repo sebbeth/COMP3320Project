@@ -56,7 +56,7 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 20.0f, 50.0f);
+glm::vec3 lightPos(0.0f, 30000.0f, 50000.0f);
 
 int main() {
 	glfwInit();
@@ -119,7 +119,7 @@ int main() {
 		DoMovement();
 
 		//render
-		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+		glClearColor(0.47f, 0.67f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		ourShader.Use();
@@ -138,7 +138,7 @@ int main() {
 
 		//Draw all the loaded models within the game
 
-		for (size_t i = 0; i < 4; i++)
+		for (size_t i = 0; i < levelData.getCardinality(); i++)
 		{
 
 			// material properties
