@@ -56,7 +56,7 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 30000.0f, 50000.0f);
+glm::vec3 lightPos(0.0f, 100.0f, 0.0f);
 
 int main() {
 	glfwInit();
@@ -105,7 +105,6 @@ int main() {
 	LevelData levelData;
 
 
-
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
 	//Game Loop
@@ -129,7 +128,7 @@ int main() {
 		// light properties
 		ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
 		ourShader.setVec3("light.diffuse", 0.7f, 0.7f, 0.5f);
-		ourShader.setVec3("light.specular", 1.0f, 1.0f, 0.0f);
+		ourShader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
 
 
 		glm::mat4 view = camera.GetViewMatrix();
