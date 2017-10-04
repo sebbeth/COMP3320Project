@@ -35,6 +35,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "LevelData.h"
+#include "TrackSegmentStraight.h"
 
 const GLint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
@@ -50,14 +51,14 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
-bool startSequence = true;
+bool startSequence = false;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 100.0f, 0.0f);
+glm::vec3 lightPos(0.0f, 200.0f, 300.0f);
 
 int main() {
 	glfwInit();
@@ -106,6 +107,7 @@ int main() {
 	LevelData levelData;
 
 
+
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
 	// Camera fly in sequence
@@ -123,6 +125,11 @@ int main() {
 		//check for events/input
 		glfwPollEvents();
 		DoMovement();
+
+		// Do object movement
+
+		levelData.moveObjectOnSegment(11, 0.01);
+
 
 		//render
 		glClearColor(0.47f, 0.67f, 0.98f, 1.0f);
@@ -144,18 +151,22 @@ int main() {
 
 		//Draw all the loaded models within the game
 
+
+	
 		for (size_t i = 0; i < levelData.getCardinality(); i++)
 		{
 
 			// material properties
 			
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
-			ourShader.setFloat("material.shininess", 60.0f);
+			ourShader.setFloat("material.shininess", 64.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
 			levelData.getModel(i).Draw(ourShader);
 
 		}
-	
+
+		
+
 		view = camera.GetViewMatrix();
 
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");

@@ -97,6 +97,8 @@ public:
 			{
 				this->position += this->right * velocity;
 			}
+
+			std::cout << "(" << this->position.x << "," << this->position.y << "," << this->position.z << ")" << std::endl;
 		}
 	}
 
