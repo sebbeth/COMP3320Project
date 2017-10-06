@@ -35,6 +35,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "LevelData.h"
+#include "TrackSegmentStraight.h"
 
 const GLint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
@@ -50,13 +51,14 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
+bool startSequence = false;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 30000.0f, 50000.0f);
+glm::vec3 lightPos(0.0f, 200.0f, 300.0f);
 
 int main() {
 	glfwInit();
@@ -108,6 +110,12 @@ int main() {
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
+	// Camera fly in sequence
+	if (startSequence)
+	{
+		camera.startFlyIn();
+	}
+
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
 		GLfloat currentFrame = glfwGetTime();
@@ -117,6 +125,11 @@ int main() {
 		//check for events/input
 		glfwPollEvents();
 		DoMovement();
+
+		// Do object movement
+
+		levelData.moveObjectOnTrack(11, 0.1);
+
 
 		//render
 		glClearColor(0.47f, 0.67f, 0.98f, 1.0f);
@@ -129,7 +142,7 @@ int main() {
 		// light properties
 		ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
 		ourShader.setVec3("light.diffuse", 0.7f, 0.7f, 0.5f);
-		ourShader.setVec3("light.specular", 1.0f, 1.0f, 0.0f);
+		ourShader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
 
 
 		glm::mat4 view = camera.GetViewMatrix();
@@ -138,18 +151,22 @@ int main() {
 
 		//Draw all the loaded models within the game
 
+
+	
 		for (size_t i = 0; i < levelData.getCardinality(); i++)
 		{
 
 			// material properties
 			
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
-			ourShader.setFloat("material.shininess", 60.0f);
+			ourShader.setFloat("material.shininess", 64.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
 			levelData.getModel(i).Draw(ourShader);
 
 		}
-	
+
+		
+
 		view = camera.GetViewMatrix();
 
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
@@ -183,6 +200,13 @@ void DoMovement() {
 	}
 	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) {
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	}
+
+	// Camera fly in sequence
+	if (startSequence)
+	{
+		camera.updateFlyIn(deltaTime);
+
 	}
 }
 

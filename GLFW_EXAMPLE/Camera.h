@@ -32,15 +32,19 @@ enum Camera_Movement
 // Default camera values
 const GLfloat YAW = -90.0f;
 const GLfloat PITCH = 0.0f;
-const GLfloat SPEED = 20.0f;
+const GLfloat SPEED = 30.0f;
 const GLfloat SENSITIVTY = 0.25f;
 const GLfloat ZOOM = 45.0f;
+const GLfloat CAMERAFLYINSPEED = 50.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
 public:
+
+	glm::vec3 position;
+
 	// Constructor with vectors
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), GLfloat yaw = YAW, GLfloat pitch = PITCH) : front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVTY), zoom(ZOOM)
 	{
@@ -70,55 +74,62 @@ public:
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 	void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 	{
-		GLfloat velocity = this->movementSpeed * deltaTime;
-
-		if (direction == FORWARD)
+		if (!flyInMode)
 		{
-			this->position += this->front * velocity;
-		}
+			GLfloat velocity = this->movementSpeed * deltaTime;
 
-		if (direction == BACKWARD)
-		{
-			this->position -= this->front * velocity;
-		}
+			if (direction == FORWARD)
+			{
+				this->position += this->front * velocity;
+			}
 
-		if (direction == LEFT)
-		{
-			this->position -= this->right * velocity;
-		}
+			if (direction == BACKWARD)
+			{
+				this->position -= this->front * velocity;
+			}
 
-		if (direction == RIGHT)
-		{
-			this->position += this->right * velocity;
+			if (direction == LEFT)
+			{
+				this->position -= this->right * velocity;
+			}
+
+			if (direction == RIGHT)
+			{
+				this->position += this->right * velocity;
+			}
+
+			std::cout << "(" << this->position.x << "," << this->position.y << "," << this->position.z << ")" << std::endl;
 		}
-	
 	}
 
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 	void ProcessMouseMovement(GLfloat xOffset, GLfloat yOffset, GLboolean constrainPitch = true)
 	{
-		xOffset *= this->mouseSensitivity;
-		yOffset *= this->mouseSensitivity;
-
-		this->yaw += xOffset;
-		this->pitch += yOffset;
-
-		// Make sure that when pitch is out of bounds, screen doesn't get flipped
-		if (constrainPitch)
+		if (!flyInMode)
 		{
-			if (this->pitch > 89.0f)
+			xOffset *= this->mouseSensitivity;
+			yOffset *= this->mouseSensitivity;
+
+			this->yaw += xOffset;
+			this->pitch += yOffset;
+
+			// Make sure that when pitch is out of bounds, screen doesn't get flipped
+			if (constrainPitch)
 			{
-				this->pitch = 89.0f;
+				if (this->pitch > 89.0f)
+				{
+					this->pitch = 89.0f;
+				}
+
+				if (this->pitch < -89.0f)
+				{
+					this->pitch = -89.0f;
+				}
 			}
 
-			if (this->pitch < -89.0f)
-			{
-				this->pitch = -89.0f;
-			}
+			// Update Front, Right and Up Vectors using the updated Eular angles
+			this->updateCameraVectors();
 		}
-
-		// Update Front, Right and Up Vectors using the updated Eular angles
-		this->updateCameraVectors();
 	}
 
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
@@ -145,13 +156,48 @@ public:
 		return this->zoom;
 	}
 
+	void startFlyIn() 
+	{
+		this->flyInMode = true;
+		this->pitch = -5.0;
+		this->position = glm::vec3(0.0f, 70.0f, 500.0f);
+
+	}
+
+	void updateFlyIn(GLfloat deltaTime)
+	{
+		if (flyInMode)
+		{
+			GLfloat velocity = this->flyInSpeed * deltaTime;
+
+			this->position += this->front * velocity;
+
+			this->updateCameraVectors();
+
+			GLfloat distance = this->position.z - this->flyInEndPosition;
+
+			if (distance < 6.0f) 
+			{
+				if (flyInSpeed > 0.0f) {
+					flyInSpeed = flyInSpeed - 0.2f;
+					pitch -= 0.05f;
+				}
+				else {
+					flyInMode = false;
+					flyInSpeed = CAMERAFLYINSPEED;
+				}
+
+			}
+		}
+	}
+
 private:
 	// Camera Attributes
-	glm::vec3 position;
 	glm::vec3 front;
 	glm::vec3 up;
 	glm::vec3 right;
 	glm::vec3 worldUp;
+
 
 	// Eular Angles
 	GLfloat yaw;
@@ -161,6 +207,11 @@ private:
 	GLfloat movementSpeed;
 	GLfloat mouseSensitivity;
 	GLfloat zoom;
+
+	bool flyInMode = false;
+	GLfloat flyInSpeed = CAMERAFLYINSPEED;
+	GLfloat flyInEndPosition = 250.0f;
+
 
 	// Calculates the front vector from the Camera's (updated) Eular Angles
 	void updateCameraVectors()
