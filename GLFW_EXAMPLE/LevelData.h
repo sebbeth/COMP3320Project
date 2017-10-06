@@ -14,19 +14,21 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "Model.h";
-#include "TrackSegmentStraight.h"
+//#include "TrackSegmentStraight.h"
+#include "Track.h"
 
 struct GameObject {
 
 
 	glm::mat4 positioning;
 	Model model;
-	float spectacular;
-	TrackSegmentStraight segment;
+	float specular;
+	Track track;
+	int segmentOnTrack;
 	double positionOnSegment;
 };
 
-const int cardinality = 15;
+const int cardinality = 20;
 
 class LevelData
 {
@@ -60,33 +62,41 @@ public:
 		loadObject(6, "models/basicTree.obj", glm::vec3(67.7139f, -7.78422f, 37.001f), 0.0f);
 		loadObject(7, "models/basicTree.obj", glm::vec3(64.6147f, -2.3836f, 26.1538f), 0.0f);
 	
-		TrackSegmentStraight aSegment(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(50.0f, 00.0f, 100.0f));
 
-		// SEGMENT Test
-		loadObject(10, "models/basicTree.obj", aSegment.pointA, 0.0f);
-		loadObject(9, "models/basicTree.obj", aSegment.pointB, 0.0f);
-		loadObject(11, "models/arrow.obj", aSegment.pointA, 0.0f);
+	
 
 
+		Track track;
 
-		objects[11].segment = aSegment;
-		//moveObjectOnSegment(11, 80);
+		track.addSegment(0,glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(50.0f, 0.0f, 100.0f));
+		track.addSegment(1, glm::vec3(50.0f, 0.0f, 100.0f), glm::vec3(50.0f, 0.0f, 150.0f));
 
-		//objects[11].positioning = glm::rotate(objects[11].positioning, 180.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		loadObject(10, "models/basicTree.obj", track.segments[0].pointA, 0.0f);
+		loadObject(9, "models/basicTree.obj", track.segments[0].pointB, 0.0f);
+		loadObject(12, "models/basicTree.obj", track.segments[1].pointB, 0.0f);
+		loadObject(11, "models/arrow.obj", track.segments[0].pointA, 0.0f);
+
+		objects[11].track = track;
+		objects[11].segmentOnTrack = 0;
 
 	}
-
-	void moveObjectOnSegment(int index, double input) {
+	
+	void moveObjectOnTrack(int index, double input) {
 
 		// Set positionOnSegment and calculate new positioning and rotation
 
 		objects[index].positionOnSegment = input;
 
-		glm::vec3 delta = objects[index].segment.calculateDistanceToMoveVector(input);
-
+		int segmentIndex = objects[11].segmentOnTrack;
+		glm::vec3 delta = objects[index].track.segments[segmentIndex].calculateDistanceToMoveVector(input);
 		objects[index].positioning = glm::translate(objects[index].positioning, delta);
-	}
 
+		cout << "" << endl;
+		// Now check if we need to move to a new track segment
+		objects[index].track.checkSegmentOvershoot(segmentIndex);
+
+	}
+	
 	int getCardinality()
 	{
 		return cardinality;
@@ -111,7 +121,7 @@ public:
 
 	float getObjectShininess(int id) 
 	{
-		return objects[id].spectacular;
+		return objects[id].specular;
 	}
 
 	int size() 
@@ -121,12 +131,12 @@ public:
 
 private:
 
-	void loadObject(int index, GLchar *modelPath, glm::vec3 positioning, float spectacular)
+	void loadObject(int index, GLchar *modelPath, glm::vec3 positioning, float specular)
 	{
 
 
 		// HOUSE
-		objects[index].spectacular = spectacular;
+		objects[index].specular = specular;
 		objects[index].positioning = glm::translate(objects[index].positioning, positioning);
 		objects[index].model.load(modelPath);
 	}

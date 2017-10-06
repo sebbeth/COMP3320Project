@@ -128,7 +128,7 @@ int main() {
 
 		// Do object movement
 
-		levelData.moveObjectOnSegment(11, 0.01);
+		levelData.moveObjectOnTrack(11, 0.1);
 
 
 		//render

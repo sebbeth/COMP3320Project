@@ -78,5 +78,8 @@
     <ClInclude Include="TrackSegmentStraight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Track.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
