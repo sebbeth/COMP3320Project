@@ -130,7 +130,7 @@ int main() {
 
 		//levelData.moveObjectOnTrackDirectionLess(11, 0.1);
 	//	levelData.rotateObject(11, 0.3f);
-		levelData.moveAlongTrack(11, 0.05);
+		levelData.moveAlongTrack(11, 0.1);
 
 
 		//render

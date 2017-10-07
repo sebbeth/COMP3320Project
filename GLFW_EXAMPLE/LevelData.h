@@ -26,16 +26,16 @@ struct GameObject {
 
 
 
-	glm::mat4 positioning;
+	glm::mat4 translationMatrix;
 	glm::mat4 rotationMatrix;
 
 	glm::vec3 orientationVector;
 
-	glm::vec3 currentOrientation;
-
 	glm::vec3 position;
 	
 	float thetaRotation;
+	float rotation;
+
 
 	Model model;
 	float specular;
@@ -60,7 +60,7 @@ public:
 		// x, z, -y
 
 		//Ground object
-	//	loadObject(0, "models/mountian4.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
+		loadObject(0, "models/mountian4.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
 	
 		//LakeSurface
 		loadObject(8, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.5f);
@@ -93,8 +93,8 @@ public:
 
 		
 		
-		track2->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-53, 10.1, 36));
-		track2->addSegment(1, glm::vec3(-53, 10.1, 36), glm::vec3(-18,-10.6,55));
+		track2->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-53, -10.1, 36));
+		track2->addSegment(1, glm::vec3(-53, -10.1, 36), glm::vec3(-18,-10.6,55));
 		track2->addSegment(2, glm::vec3(-18, -10.6, 55), glm::vec3(-9.2, -10.6, 76));
 
 
@@ -115,6 +115,27 @@ public:
 
 
 	}
+
+	float getNewRotationValue(float theta, float rotation) {
+
+		if (abs(theta - rotation) > 90.0f) { 
+			return theta;
+
+		}
+
+		if (theta > rotation) {
+
+			return rotation + 1;
+		}
+		else if (theta < rotation) {
+			return rotation - 1;
+
+		}
+		else {
+			return theta;
+		}
+
+	}
 	
 	void moveAlongTrack(int index, double delta) {
 
@@ -123,28 +144,17 @@ public:
 		objects[index].positionOnSegment = delta;
 		int segmentIndex = objects[index].segmentOnTrack;
 
-
-
-
 		glm::vec3 translationDelta = objects[index].track->segments[segmentIndex]->calculateDistanceToMoveVector(delta);
 
 		objects[index].thetaRotation = objects[index].track->segments[segmentIndex]->getSegmentAngle() + 90.0f;
 
-		//std::cout << objects[index].thetaRotation << endl;
+		if (objects[index].thetaRotation != objects[index].rotation) {
+			objects[index].rotation = getNewRotationValue(objects[index].thetaRotation, objects[index].rotation);
+		}
 
-
-	//	objects[index].thetaRotation = calculateAngleBetweenVectors(glm::vec3(-100000.0f,0,0), translationDelta);
-		//objects[index].thetaRotation = 0.0f;
-
-		//float degrees = objects[id].orientationVector.y;
 		objects[index].orientationVector = objects[index].track->segments[segmentIndex]->getSegmentNormal();
 
-
-		objects[index].currentOrientation = translationDelta;
-
-	//	std::cout << "(" << objects[index].currentOrientation.x << "," << objects[index].currentOrientation.y << "," << objects[index].currentOrientation.z << ")" << std::endl;
-
-		objects[index].positioning = glm::translate(objects[index].positioning, translationDelta);
+		objects[index].translationMatrix = glm::translate(objects[index].translationMatrix, translationDelta);
 
 		objects[index].position = objects[index].position + translationDelta;
 
@@ -207,7 +217,7 @@ public:
 	glm::mat4 getObjectPositioning(int id) 
 	{
 
-		return objects[id].positioning;
+		return objects[id].translationMatrix;
 	}
 
 	
@@ -215,11 +225,7 @@ public:
 	glm::mat4 getObjectRotation(int id)
 	{
 
-		
-
-
-		//	return glm::rotate(objects[id].positioning, degrees, unitVector);
-			return glm::rotate(objects[id].positioning, objects[id].thetaRotation, objects[id].orientationVector);
+		return glm::rotate(objects[id].translationMatrix, objects[id].rotation, objects[id].orientationVector);
 
 	
 	}
@@ -227,7 +233,7 @@ public:
 	void translateObject(int id, glm::vec3 input)
 	{
 
-		objects[id].positioning = glm::translate(objects[id].positioning, input);
+		objects[id].translationMatrix = glm::translate(objects[id].translationMatrix, input);
 	}
 
 	float getObjectShininess(int id) 
@@ -249,9 +255,11 @@ private:
 		objects[index].specular = specular;
 		objects[index].position = positioning;
 		objects[index].thetaRotation = 0.0f;
+		objects[index].rotation = 0.0f;
+
 		objects[index].orientationVector = glm::vec3(0,1.0f,0);
 
-		objects[index].positioning = glm::translate(objects[index].positioning, positioning);
+		objects[index].translationMatrix = glm::translate(objects[index].translationMatrix, positioning);
 		objects[index].model.load(modelPath);
 	}
 

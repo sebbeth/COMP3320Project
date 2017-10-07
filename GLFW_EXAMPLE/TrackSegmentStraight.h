@@ -49,19 +49,16 @@ public:
 
 	glm::vec3 getSegmentNormal() {
 
-		return glm::vec3(0,1.0f,0);
-			
+		glm::vec3 crossProduct = glm::cross(glm::vec3(1.0f, 0, 0), getPathUnitVector());
+
+		//return crossProduct;
+		return glm::vec3(0, 1.0f, 0);
+
 	}
 
 	float getSegmentAngle() {
 
-
-
 		float value =  atan2( (pointA.x - pointB.x) , (pointA.z - pointB.z));
-
-		std::cout << pointB.z << ":" << pointA.z << ":" << pointB.x << ":" << pointA.x << ":" << value << endl;
-
-
 		return value *(180.0 / 3.14159265) ;
 
 	}
