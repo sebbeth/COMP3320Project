@@ -128,7 +128,9 @@ int main() {
 
 		// Do object movement
 
-		levelData.moveObjectOnTrack(11, 0.1);
+		//levelData.moveObjectOnTrackDirectionLess(11, 0.1);
+	//	levelData.rotateObject(11, 0.3f);
+		levelData.moveAlongTrack(11, 0.05);
 
 
 		//render
@@ -161,6 +163,8 @@ int main() {
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
 			ourShader.setFloat("material.shininess", 64.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
+			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(i)));
+
 			levelData.getModel(i).Draw(ourShader);
 
 		}

@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'Carriage.blend'
 # www.blender.org
-mtllib CarriageNew.mtl
+mtllib Carriage.mtl
 o Cube_Cube.001
 v -0.458803 1.813211 -2.972066
 v -0.458803 2.802333 -2.492613

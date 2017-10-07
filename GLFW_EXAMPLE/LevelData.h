@@ -12,6 +12,11 @@
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtx/string_cast.hpp"
+
+#include <cmath>
+#include <math.h> 
 
 #include "Model.h";
 //#include "TrackSegmentStraight.h"
@@ -20,10 +25,21 @@
 struct GameObject {
 
 
+
 	glm::mat4 positioning;
+	glm::mat4 rotationMatrix;
+
+	glm::vec3 orientationVector;
+
+	glm::vec3 currentOrientation;
+
+	glm::vec3 position;
+	
+	float thetaRotation;
+
 	Model model;
 	float specular;
-	Track track;
+	Track *track;
 	int segmentOnTrack;
 	double positionOnSegment;
 };
@@ -41,19 +57,19 @@ public:
 
 
 
+		// x, z, -y
 
 		//Ground object
-		loadObject(0, "models/mountian4.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
+	//	loadObject(0, "models/mountian4.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
 	
 		//LakeSurface
 		loadObject(8, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.5f);
 
 
 		// Calibration tree
-		// x, z, -y
-		loadObject(1, "models/basicTree.obj", glm::vec3(-60.9108f, -9.53202f, 68.0045f), 0.0f);
+		//loadObject(1, "models/basicTree.obj", glm::vec3(-60.9108f, -9.53202f, 68.0045f), 0.0f);
 
-		loadObject(2, "models/House.obj", glm::vec3(-6.0f, 70.6f, -5.0f),0.0f);
+		//loadObject(2, "models/House.obj", glm::vec3(-6.0f, 70.6f, -5.0f),0.0f);
 
 		// Trees
 		loadObject(3, "models/basicTree.obj", glm::vec3(56.178f, -0.943427f, 31.6635f), 0.0f);
@@ -66,36 +82,116 @@ public:
 	
 
 
-		Track track;
+		Track *track = new Track;
+		Track *track2 = new Track;
+		track->next = track2;
+		track2->next = track;
 
-		track.addSegment(0,glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(50.0f, 0.0f, 100.0f));
-		track.addSegment(1, glm::vec3(50.0f, 0.0f, 100.0f), glm::vec3(50.0f, 0.0f, 150.0f));
+		track->addSegment(0,glm::vec3(-9.2,-10.6,76), glm::vec3(-50,-10,73));
+		track->addSegment(1, glm::vec3(-50, -10, 73), glm::vec3(-67,-10,55.1));
+		track->addSegment(2, glm::vec3(-67, -10, 55.1), glm::vec3(-65,-10.7,46));
 
-		loadObject(10, "models/basicTree.obj", track.segments[0].pointA, 0.0f);
-		loadObject(9, "models/basicTree.obj", track.segments[0].pointB, 0.0f);
-		loadObject(12, "models/basicTree.obj", track.segments[1].pointB, 0.0f);
-		loadObject(11, "models/arrow.obj", track.segments[0].pointA, 0.0f);
+		
+		
+		track2->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-53, 10.1, 36));
+		track2->addSegment(1, glm::vec3(-53, 10.1, 36), glm::vec3(-18,-10.6,55));
+		track2->addSegment(2, glm::vec3(-18, -10.6, 55), glm::vec3(-9.2, -10.6, 76));
+
+
+		loadObject(10, "models/basicTree.obj", track->segments[0]->pointA, 0.0f);
+		loadObject(9, "models/basicTree.obj", track->segments[0]->pointB, 0.0f);
+		loadObject(12, "models/basicTree.obj", track->segments[1]->pointB, 0.0f);
+		
+		loadObject(13, "models/basicTree.obj", track2->segments[0]->pointA, 0.0f);
+		loadObject(14, "models/basicTree.obj", track2->segments[0]->pointB, 0.0f);
+		loadObject(15, "models/basicTree.obj", track2->segments[1]->pointB, 0.0f);
+
+		loadObject(11, "models/Arrow.obj", track->segments[0]->pointA, 0.0f);
 
 		objects[11].track = track;
 		objects[11].segmentOnTrack = 0;
 
+		objects[11].thetaRotation = 0.0f;
+
+
 	}
 	
-	void moveObjectOnTrack(int index, double input) {
+	void moveAlongTrack(int index, double delta) {
 
 		// Set positionOnSegment and calculate new positioning and rotation
 
-		objects[index].positionOnSegment = input;
+		objects[index].positionOnSegment = delta;
+		int segmentIndex = objects[index].segmentOnTrack;
 
-		int segmentIndex = objects[11].segmentOnTrack;
-		glm::vec3 delta = objects[index].track.segments[segmentIndex].calculateDistanceToMoveVector(input);
-		objects[index].positioning = glm::translate(objects[index].positioning, delta);
 
-		cout << "" << endl;
-		// Now check if we need to move to a new track segment
-		objects[index].track.checkSegmentOvershoot(segmentIndex);
 
+
+		glm::vec3 translationDelta = objects[index].track->segments[segmentIndex]->calculateDistanceToMoveVector(delta);
+
+		objects[index].thetaRotation = objects[index].track->segments[segmentIndex]->getSegmentAngle() + 90.0f;
+
+		//std::cout << objects[index].thetaRotation << endl;
+
+
+	//	objects[index].thetaRotation = calculateAngleBetweenVectors(glm::vec3(-100000.0f,0,0), translationDelta);
+		//objects[index].thetaRotation = 0.0f;
+
+		//float degrees = objects[id].orientationVector.y;
+		objects[index].orientationVector = objects[index].track->segments[segmentIndex]->getSegmentNormal();
+
+
+		objects[index].currentOrientation = translationDelta;
+
+	//	std::cout << "(" << objects[index].currentOrientation.x << "," << objects[index].currentOrientation.y << "," << objects[index].currentOrientation.z << ")" << std::endl;
+
+		objects[index].positioning = glm::translate(objects[index].positioning, translationDelta);
+
+		objects[index].position = objects[index].position + translationDelta;
+
+		// Now check if we need to move to a new track segment		
+		if (objects[index].track->segments[segmentIndex]->objectHasOvershotThisSegment(objects[index].position)) {
+			// Has overshot
+
+			objects[index].segmentOnTrack = objects[index].track->nextSegment(segmentIndex);
+
+			// Move object to the start of next segment so it can't drift.
+			int nextSegmentOnTrack = objects[index].track->nextSegment(segmentIndex);
+			if (nextSegmentOnTrack == -1) 
+			{ 
+				// Go to next track
+				objects[index].track = objects[index].track->nextTrack();
+				objects[index].segmentOnTrack = 0;
+			}
+			else {
+				objects[index].segmentOnTrack = nextSegmentOnTrack;
+			}
+		}
 	}
+
+	float getVectorMagnitude(glm::vec3 v) {
+
+		return sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
+	}
+
+
+	float calculateAngleBetweenVectors(glm::vec3 a, glm::vec3 b) {
+
+
+		float dotProduct = a.x * b.x + a.y * b.y + a.z * b.z;
+	
+		float value = dotProduct / (getVectorMagnitude(a) * getVectorMagnitude(b));
+
+
+		float output = acos (value) * (180.0 / 3.14159265);
+		
+
+		std::cout << value << ":" << output << endl;
+
+		return output;
+	}
+
+
+
 	
 	int getCardinality()
 	{
@@ -106,14 +202,29 @@ public:
 	{
 		return objects[id].model;
 	}
- 
+
+	
 	glm::mat4 getObjectPositioning(int id) 
 	{
 
 		return objects[id].positioning;
 	}
 
-	void setObjectPositioning(int id, glm::vec3 input)
+	
+
+	glm::mat4 getObjectRotation(int id)
+	{
+
+		
+
+
+		//	return glm::rotate(objects[id].positioning, degrees, unitVector);
+			return glm::rotate(objects[id].positioning, objects[id].thetaRotation, objects[id].orientationVector);
+
+	
+	}
+
+	void translateObject(int id, glm::vec3 input)
 	{
 
 		objects[id].positioning = glm::translate(objects[id].positioning, input);
@@ -135,8 +246,11 @@ private:
 	{
 
 
-		// HOUSE
 		objects[index].specular = specular;
+		objects[index].position = positioning;
+		objects[index].thetaRotation = 0.0f;
+		objects[index].orientationVector = glm::vec3(0,1.0f,0);
+
 		objects[index].positioning = glm::translate(objects[index].positioning, positioning);
 		objects[index].model.load(modelPath);
 	}
