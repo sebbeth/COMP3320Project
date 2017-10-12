@@ -7,14 +7,15 @@
 #include "TrackSegmentStraight.h"
 
 
-const int numberOfSegments = 50;
+int numberOfSegments = 0;
 
 class Track
 {
 
 public:
 
-	TrackSegmentStraight segments[numberOfSegments];
+	TrackSegmentStraight *segments[10];
+	Track *next;
 
 	Track() {
 
@@ -22,16 +23,41 @@ public:
 
 	void addSegment(int index, glm::vec3 a, glm::vec3 b) {
 
-		segments[index] = TrackSegmentStraight(a, b);
+		segments[index] = new TrackSegmentStraight(a, b);
 
 	}
 
-	TrackSegmentStraight checkSegmentOvershoot(int currentSegment) {
-
-		// If the object has overshot the segment, set segment to the next one
-
-		return segments[0];
+	void setNumberOfSegments(int input)
+	{
+		numberOfSegments = input;
 	}
+
+
+
+	int nextSegment(int current) {
+		
+		if (current + 1 == numberOfSegments)
+		{
+			return -1;
+		}
+		else {
+			current + 1;
+		}
+
+	}
+
+	Track* nextTrack() {
+
+		if (next != nullptr) {
+			return next;
+
+		}
+		else {
+		}
+	}
+
+
+
 
 private:
 

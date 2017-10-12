@@ -51,7 +51,7 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
-bool startSequence = false;
+bool startSequence = true;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
@@ -60,7 +60,11 @@ GLfloat lastFrame = 0.0f;
 // lighting
 glm::vec3 lightPos(0.0f, 200.0f, 300.0f);
 
+
+
 int main() {
+
+
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -104,8 +108,8 @@ int main() {
 	Shader ourShader("shaders/4.1.lighting_maps.vs", "shaders/4.1.lighting_maps.fs");
 
 	// Load the level data object, it contans all the data for the game's initial state.
-	LevelData levelData;
 
+	LevelData levelData;
 
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
@@ -126,9 +130,18 @@ int main() {
 		glfwPollEvents();
 		DoMovement();
 
+		if (keys[GLFW_KEY_1]) {
+			levelData.switchTrack(1);
+		}
+		if (keys[GLFW_KEY_2]) {
+			levelData.switchTrack(2);
+		}
+
 		// Do object movement
 
-		levelData.moveObjectOnTrack(11, 0.1);
+		//levelData.moveObjectOnTrackDirectionLess(11, 0.1);
+	//	levelData.rotateObject(11, 0.3f);
+		levelData.moveAlongTrack(11, 0.3);
 
 
 		//render
@@ -161,6 +174,8 @@ int main() {
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
 			ourShader.setFloat("material.shininess", 64.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
+			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(i)));
+
 			levelData.getModel(i).Draw(ourShader);
 
 		}
@@ -201,6 +216,7 @@ void DoMovement() {
 	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) {
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 	}
+	
 
 	// Camera fly in sequence
 	if (startSequence)

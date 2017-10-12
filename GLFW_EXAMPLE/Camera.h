@@ -98,7 +98,6 @@ public:
 				this->position += this->right * velocity;
 			}
 
-			std::cout << "(" << this->position.x << "," << this->position.y << "," << this->position.z << ")" << std::endl;
 		}
 	}
 
@@ -160,7 +159,7 @@ public:
 	{
 		this->flyInMode = true;
 		this->pitch = -5.0;
-		this->position = glm::vec3(0.0f, 70.0f, 500.0f);
+		this->position = glm::vec3(0.0f, 70.0f, 600.0f);
 
 	}
 
@@ -210,7 +209,7 @@ private:
 
 	bool flyInMode = false;
 	GLfloat flyInSpeed = CAMERAFLYINSPEED;
-	GLfloat flyInEndPosition = 250.0f;
+	GLfloat flyInEndPosition = 350.0f;
 
 
 	// Calculates the front vector from the Camera's (updated) Eular Angles
