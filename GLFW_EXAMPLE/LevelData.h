@@ -28,15 +28,10 @@ struct GameObject {
 
 	glm::mat4 translationMatrix;
 	glm::mat4 rotationMatrix;
-
 	glm::vec3 orientationVector;
-
 	glm::vec3 position;
-	
 	float thetaRotation;
 	float rotation;
-
-
 	Model model;
 	float specular;
 	Track *track;
@@ -45,6 +40,10 @@ struct GameObject {
 };
 
 const int cardinality = 20;
+
+Track *track;
+Track *track2;
+Track *track3;
 
 class LevelData
 {
@@ -65,12 +64,6 @@ public:
 		//LakeSurface
 		loadObject(8, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.5f);
 
-
-		// Calibration tree
-		//loadObject(1, "models/basicTree.obj", glm::vec3(-60.9108f, -9.53202f, 68.0045f), 0.0f);
-
-		//loadObject(2, "models/House.obj", glm::vec3(-6.0f, 70.6f, -5.0f),0.0f);
-
 		// Trees
 		loadObject(3, "models/basicTree.obj", glm::vec3(56.178f, -0.943427f, 31.6635f), 0.0f);
 		loadObject(4, "models/basicTree.obj", glm::vec3(62.9897f, -1.622170f, 31.6635f), 0.0f); // x, z, -y
@@ -79,23 +72,31 @@ public:
 		loadObject(7, "models/basicTree.obj", glm::vec3(64.6147f, -2.3836f, 26.1538f), 0.0f);
 	
 
-	
 
+		 track = new Track;
+		 track2 = new Track;
+		 track3 = new Track;
 
-		Track *track = new Track;
-		Track *track2 = new Track;
 		track->next = track2;
-		track2->next = track;
+		track2->next = track3;
+		track3->next = track;
 
 		track->addSegment(0,glm::vec3(-9.2,-10.6,76), glm::vec3(-50,-10,73));
 		track->addSegment(1, glm::vec3(-50, -10, 73), glm::vec3(-67,-10,55.1));
 		track->addSegment(2, glm::vec3(-67, -10, 55.1), glm::vec3(-65,-10.7,46));
-
+		track->setNumberOfSegments(3);
 		
 		
 		track2->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-53, -10.1, 36));
 		track2->addSegment(1, glm::vec3(-53, -10.1, 36), glm::vec3(-18,-10.6,55));
 		track2->addSegment(2, glm::vec3(-18, -10.6, 55), glm::vec3(-9.2, -10.6, 76));
+		track2->setNumberOfSegments(3);
+
+
+		track3->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-43, -10.1, 36));
+		track3->addSegment(1, glm::vec3(-43, -10.1, 36), glm::vec3(-28, -10.6, 55));
+		track3->addSegment(2, glm::vec3(-28, -10.6, 55), glm::vec3(-9.2, -10.6, 76));
+		track3->setNumberOfSegments(3);
 
 
 		loadObject(10, "models/basicTree.obj", track->segments[0]->pointA, 0.0f);
@@ -120,21 +121,38 @@ public:
 
 		if (abs(theta - rotation) > 90.0f) { 
 			return theta;
-
 		}
 
 		if (theta > rotation) {
 
-			return rotation + 1;
+			return rotation + 0.5 + abs((abs(theta - rotation)) / theta);
 		}
 		else if (theta < rotation) {
-			return rotation - 1;
+			return rotation - 0.5 - abs((abs(theta - rotation)) / theta);
 
 		}
 		else {
 			return theta;
 		}
 
+	}
+
+	void switchTrack(int trackSwitchId) {
+
+		cout << "blerp" << endl;
+
+		if (trackSwitchId == 1) 
+		{
+			track->next = track3;
+		}
+		else if (trackSwitchId == 2) 
+		{
+			track->next = track2;
+
+		}
+		else {
+
+		}
 	}
 	
 	void moveAlongTrack(int index, double delta) {

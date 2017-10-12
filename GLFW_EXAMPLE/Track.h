@@ -7,7 +7,7 @@
 #include "TrackSegmentStraight.h"
 
 
-const int numberOfSegments = 3;
+int numberOfSegments = 0;
 
 class Track
 {
@@ -19,17 +19,17 @@ public:
 
 	Track() {
 
-		for (size_t i = 0; i < numberOfSegments; i++)
-		{
-			//segments[i] = NULL;
-		}
-
 	}
 
 	void addSegment(int index, glm::vec3 a, glm::vec3 b) {
 
 		segments[index] = new TrackSegmentStraight(a, b);
 
+	}
+
+	void setNumberOfSegments(int input)
+	{
+		numberOfSegments = input;
 	}
 
 
