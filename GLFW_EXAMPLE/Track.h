@@ -14,7 +14,7 @@ class Track
 
 public:
 
-	TrackSegmentStraight *segments[10];
+	TrackSegmentStraight *segments[20];
 	Track *next;
 
 	Track() {

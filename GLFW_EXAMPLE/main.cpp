@@ -51,7 +51,7 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
-bool startSequence = true;
+bool startSequence = false;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
@@ -139,9 +139,10 @@ int main() {
 
 		// Do object movement
 
-		//levelData.moveObjectOnTrackDirectionLess(11, 0.1);
-	//	levelData.rotateObject(11, 0.3f);
-		levelData.moveAlongTrack(11, 0.3);
+	
+		levelData.moveAlongTrack(11, 0.1);
+		levelData.moveAlongTrack(16, 0.1);
+
 
 
 		//render
@@ -175,7 +176,7 @@ int main() {
 			ourShader.setFloat("material.shininess", 64.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(i)));
-
+			
 			levelData.getModel(i).Draw(ourShader);
 
 		}

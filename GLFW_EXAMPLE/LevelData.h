@@ -59,18 +59,11 @@ public:
 		// x, z, -y
 
 		//Ground object
-		loadObject(0, "models/mountian5.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
+		loadObject(0, "models/mountian6.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
 	
 		//LakeSurface
 		loadObject(8, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.5f);
 
-		// Trees
-		loadObject(3, "models/basicTree.obj", glm::vec3(56.178f, -0.943427f, 31.6635f), 0.0f);
-		loadObject(4, "models/basicTree.obj", glm::vec3(62.9897f, -1.622170f, 31.6635f), 0.0f); // x, z, -y
-		loadObject(5, "models/basicTree.obj", glm::vec3(58.0719f, -1.84353f, 36.3123f), 0.0f);
-		loadObject(6, "models/basicTree.obj", glm::vec3(67.7139f, -7.78422f, 37.001f), 0.0f);
-		loadObject(7, "models/basicTree.obj", glm::vec3(64.6147f, -2.3836f, 26.1538f), 0.0f);
-	
 
 
 		 track = new Track;
@@ -81,14 +74,14 @@ public:
 		track2->next = track3;
 		track3->next = track;
 
-		track->addSegment(0,glm::vec3(-9.2,-10.6,76), glm::vec3(-50,-10,73));
-		track->addSegment(1, glm::vec3(-50, -10, 73), glm::vec3(-67,-10,55.1));
-		track->addSegment(2, glm::vec3(-67, -10, 55.1), glm::vec3(-65,-10.7,46));
+		track->addSegment(0, glm::vec3(-9.2, -10.6, 76), glm::vec3(-50, -10, 73));
+		track->addSegment(1, glm::vec3(-50, -10, 73), glm::vec3(-67, -10, 55.1));
+		track->addSegment(2, glm::vec3(-67, -10, 55.1), glm::vec3(-65, -10.7, 46));
 		track->setNumberOfSegments(3);
-		
-		
+
+
 		track2->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-53, -10.1, 36));
-		track2->addSegment(1, glm::vec3(-53, -10.1, 36), glm::vec3(-18,-10.6,55));
+		track2->addSegment(1, glm::vec3(-53, -10.1, 36), glm::vec3(-18, -10.6, 55));
 		track2->addSegment(2, glm::vec3(-18, -10.6, 55), glm::vec3(-9.2, -10.6, 76));
 		track2->setNumberOfSegments(3);
 
@@ -99,21 +92,42 @@ public:
 		track3->setNumberOfSegments(3);
 
 
-		loadObject(10, "models/basicTree.obj", track->segments[0]->pointA, 0.0f);
-		loadObject(9, "models/basicTree.obj", track->segments[0]->pointB, 0.0f);
-		loadObject(12, "models/basicTree.obj", track->segments[1]->pointB, 0.0f);
-		
-		loadObject(13, "models/basicTree.obj", track2->segments[0]->pointA, 0.0f);
-		loadObject(14, "models/basicTree.obj", track2->segments[0]->pointB, 0.0f);
-		loadObject(15, "models/basicTree.obj", track2->segments[1]->pointB, 0.0f);
 
-		loadObject(11, "models/Arrow.obj", track->segments[0]->pointA, 0.0f);
+		/*
+
+		track->addSegment(0,glm::vec3(-16.86,-11.4,78.5), glm::vec3(-79.4, -10.2, 50.79));
+		track->addSegment(1, glm::vec3(-79.4,-10.2,50.79), glm::vec3(-92.79, -9.9, 3.7));
+		track->setNumberOfSegments(2);
+		
+		
+		track2->addSegment(0, glm::vec3(-92.79, -9.9, 3.7), glm::vec3(-58.5, -10.5, -31.6));
+		track2->addSegment(1, glm::vec3(-58.5,-10.5,-31.6), glm::vec3(4.25, -5.4, 52.37));
+		track2->addSegment(2, glm::vec3(4.25,-5.4,52.37), glm::vec3(-16.86, -11.4, 78.5));
+		track2->setNumberOfSegments(3);
+
+
+		track3->addSegment(0, glm::vec3(-92.79, -9.9, 3.7), glm::vec3(-60.61, -9.75, -43.25));
+		track3->addSegment(1, glm::vec3(-60.61,-9.75,-43.25), glm::vec3(-2.1, -11.0, -64.6));
+		track3->addSegment(2, glm::vec3(-2.1,-11,-64.6), glm::vec3(29.35, -8.7, -31.98));
+		track3->addSegment(3, glm::vec3(29.35,-8.7,-31.98), glm::vec3(43.74, -6.55, 52.6));
+		track3->addSegment(4, glm::vec3(43.74,-6.55,52.6), glm::vec3(23.2, -10.64, 75.6));
+		track3->addSegment(5, glm::vec3(23.2,-10.64,75.6), glm::vec3(-16.86, -11.4, 78.5));
+
+		track3->setNumberOfSegments(6);
+
+		*/
+		loadObject(11, "models/SteamEngine.obj", track->segments[0]->pointA, 0.0f);
+		loadObject(16, "models/CoalHopper.obj", glm::vec3(-6, -10.8, 77.1), 0.0f);
+
+		objects[16].track = track;
+		objects[16].segmentOnTrack = 0;
+		objects[16].thetaRotation = 0.0f;
 
 		objects[11].track = track;
 		objects[11].segmentOnTrack = 0;
-
 		objects[11].thetaRotation = 0.0f;
 
+	
 
 	}
 

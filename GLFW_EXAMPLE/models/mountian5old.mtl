@@ -1,5 +1,47 @@
-# Blender MTL File: 'mountian3.blend'
-# Material Count: 11
+# Blender MTL File: 'mountian5.blend'
+# Material Count: 18
+
+newmtl Bark
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.059919 0.027936 0.014282
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/DarkDirt.png
+
+newmtl Black.002
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.030829 0.030829 0.030829
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Black.003
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl CutDirt
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.111986 0.049676 0.002858
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/CutDirt.png
 
 newmtl DarkRock
 Ns 96.078431
@@ -21,7 +63,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd textures/DarkDirt.png
+map_Kd textures/Dirt.png
 
 newmtl Dirt.001
 Ns 96.078431
@@ -37,13 +79,24 @@ map_Kd textures/Dirt.png
 newmtl Grass
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
-Kd 0.135052 0.640000 0.023125	
+Kd 0.135052 0.640000 0.023125
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
 map_Kd textures/Grass.png
+
+newmtl Material.000
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.571954 0.589603
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/DarkRock.png
 
 newmtl Material.007
 Ns 96.078431
@@ -67,6 +120,17 @@ d 1.000000
 illum 2
 map_Kd textures/Rock.png
 
+newmtl Roof.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.145324 0.033481 0.016558
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/CutDirt.png
+
 newmtl Sand
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -89,6 +153,28 @@ d 1.000000
 illum 2
 map_Kd textures/Snow.png
 
+newmtl Snow.002
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.700715 0.665294 0.540468
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/Snow.png
+
+newmtl TreeLeaves
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.005725 0.090242 0.004673
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/TreeLeaves.png
+
 newmtl Tunnel
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -98,7 +184,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd textures/Rock.png
+map_Kd textures/DarkRock.png
 
 newmtl Water
 Ns 96.078431
@@ -110,15 +196,3 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd textures/Water.png
-
-newmtl Water.001
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.007784 0.314316 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd textures/Water.png
-
