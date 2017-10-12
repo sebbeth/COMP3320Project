@@ -51,7 +51,7 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
-bool startSequence = false;
+bool startSequence = true;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
