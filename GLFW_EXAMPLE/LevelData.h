@@ -59,10 +59,12 @@ public:
 		// x, z, -y
 
 		//Ground object
-		loadObject(0, "models/mountian6.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
-	
+		loadObject(0, "models/mountianTop.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
+		loadObject(1, "models/mountianBottom.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f);
+
 		//LakeSurface
-		loadObject(8, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.5f);
+		loadObject(2, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.1f);
+		loadObject(3, "models/mountianMirror.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f);
 
 
 
@@ -116,16 +118,16 @@ public:
 		track3->setNumberOfSegments(6);
 
 		*/
-		loadObject(11, "models/SteamEngine.obj", track->segments[0]->pointA, 0.0f);
-		loadObject(16, "models/CoalHopper.obj", glm::vec3(-6, -10.8, 77.1), 0.0f);
+		loadObject(4, "models/SteamEngine.obj", track->segments[0]->pointA, 0.0f);
+		loadObject(5, "models/CoalHopper.obj", glm::vec3(-6, -10.8, 77.1), 0.0f);
 
-		objects[16].track = track;
-		objects[16].segmentOnTrack = 0;
-		objects[16].thetaRotation = 0.0f;
+		objects[4].track = track;
+		objects[4].segmentOnTrack = 0;
+		objects[4].thetaRotation = 0.0f;
 
-		objects[11].track = track;
-		objects[11].segmentOnTrack = 0;
-		objects[11].thetaRotation = 0.0f;
+		objects[5].track = track;
+		objects[5].segmentOnTrack = 0;
+		objects[5].thetaRotation = 0.0f;
 
 	
 

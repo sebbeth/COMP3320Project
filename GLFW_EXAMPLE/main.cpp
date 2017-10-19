@@ -51,14 +51,14 @@ GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
-bool startSequence = true;
+bool startSequence = false;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 200.0f, 300.0f);
+glm::vec3 lightPos(36.0, 200, 200); // Above water -36.0, 50, -70
 
 
 
@@ -140,8 +140,8 @@ int main() {
 		// Do object movement
 
 	
-		levelData.moveAlongTrack(11, 0.1);
-		levelData.moveAlongTrack(16, 0.1);
+		levelData.moveAlongTrack(4, 0.1);
+		levelData.moveAlongTrack(5, 0.1);
 
 
 
@@ -166,11 +166,15 @@ int main() {
 		//Draw all the loaded models within the game
 
 
-	
+		glEnable(GL_DEPTH_TEST);
+
 		for (size_t i = 0; i < levelData.getCardinality(); i++)
 		{
 
-			// material properties
+			if (i == 1) {
+			
+			}
+			
 			
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
 			ourShader.setFloat("material.shininess", 64.0f);
@@ -181,7 +185,60 @@ int main() {
 
 		}
 
-		
+
+		/* Don't update color or depth. */
+		glDisable(GL_DEPTH_TEST);
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+		/* Draw 1 into the stencil buffer. */
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glClear(GL_STENCIL_BUFFER_BIT);
+
+
+		/* Now drawing the floor just tags the floor pixels
+		as stencil value 1. */
+		ourShader.setVec3("material.specular", levelData.getObjectShininess(2), levelData.getObjectShininess(2), levelData.getObjectShininess(2));
+		ourShader.setFloat("material.shininess", 64.0f);
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(2)));
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(2)));
+
+		levelData.getModel(2).Draw(ourShader);
+
+		/*Re - enable update of color and depth. */
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+		//glEnable(GL_DEPTH_TEST);
+
+		/* Now, only render where stencil is set to 1. */
+		glStencilFunc(GL_EQUAL, 1, 0xFF);  /* draw if stencil ==1 */
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+
+
+
+
+
+		for (size_t i = 3; i < 4; i++)
+		{
+
+			glm::mat4 model = glm::scale(
+				glm::translate(levelData.getObjectPositioning(i), glm::vec3(0, -40, 0)),
+				glm::vec3(1, -1, 1)
+			);
+
+			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
+			ourShader.setFloat("material.shininess", 64.0f);
+			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+
+			levelData.getModel(i).Draw(ourShader);
+
+		}
+
+		glDisable(GL_STENCIL_TEST);
+
+
+		// DRAW the frame
 
 		view = camera.GetViewMatrix();
 
@@ -192,7 +249,7 @@ int main() {
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-	
+
 		//DRAW OPENGL
 		glfwSwapBuffers(window);
 	}
@@ -218,6 +275,7 @@ void DoMovement() {
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 	}
 	
+	//lightPos = camera.position;
 
 	// Camera fly in sequence
 	if (startSequence)
