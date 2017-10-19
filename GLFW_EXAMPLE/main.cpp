@@ -163,28 +163,24 @@ int main() {
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-		//Draw all the loaded models within the game
+		//Draw all the loaded models within the game EXCEPT mountianTop
 
 
 		glEnable(GL_DEPTH_TEST);
 
-		for (size_t i = 0; i < levelData.getCardinality(); i++)
+		for (size_t i = 1; i < levelData.getCardinality(); i++)
 		{
 
-			if (i == 1) {
-			
+			if (i != 3) {
+
+				ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
+				ourShader.setFloat("material.shininess", 64.0f);
+				glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
+				glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(i)));
+
+				levelData.getModel(i).Draw(ourShader);
 			}
-			
-			
-			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
-			ourShader.setFloat("material.shininess", 64.0f);
-			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
-			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(i)));
-			
-			levelData.getModel(i).Draw(ourShader);
-
 		}
-
 
 		/* Don't update color or depth. */
 		glDisable(GL_DEPTH_TEST);
@@ -197,7 +193,7 @@ int main() {
 		glClear(GL_STENCIL_BUFFER_BIT);
 
 
-		/* Now drawing the floor just tags the floor pixels
+		/* Now draw the reflective lake surface
 		as stencil value 1. */
 		ourShader.setVec3("material.specular", levelData.getObjectShininess(2), levelData.getObjectShininess(2), levelData.getObjectShininess(2));
 		ourShader.setFloat("material.shininess", 64.0f);
@@ -216,26 +212,34 @@ int main() {
 
 
 
-
-
-
-		for (size_t i = 3; i < 4; i++)
-		{
-
+		// Now draw the reflection
 			glm::mat4 model = glm::scale(
-				glm::translate(levelData.getObjectPositioning(i), glm::vec3(0, -40, 0)),
+				glm::translate(levelData.getObjectPositioning(3), glm::vec3(0, -40, 0)),
 				glm::vec3(1, -1, 1)
 			);
 
-			ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
+			ourShader.setVec3("material.specular", levelData.getObjectShininess(3), levelData.getObjectShininess(3), levelData.getObjectShininess(3));
 			ourShader.setFloat("material.shininess", 64.0f);
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
-			levelData.getModel(i).Draw(ourShader);
+			levelData.getModel(3).Draw(ourShader);
 
-		}
+		
 
 		glDisable(GL_STENCIL_TEST);
+
+
+
+		// Lastly, draw the top of the world
+		glEnable(GL_DEPTH_TEST);
+
+			ourShader.setVec3("material.specular", levelData.getObjectShininess(0), levelData.getObjectShininess(0), levelData.getObjectShininess(0));
+			ourShader.setFloat("material.shininess", 64.0f);
+			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(0)));
+			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(0)));
+
+			levelData.getModel(0).Draw(ourShader);
+
 
 
 		// DRAW the frame
