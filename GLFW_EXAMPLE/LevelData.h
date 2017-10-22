@@ -59,7 +59,7 @@ public:
 		// x, z, -y
 
 		//Ground object
-		loadObject(0, "models/mountianTop.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
+		loadObject(0, "models/mountian6.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
 		loadObject(1, "models/mountianBottom.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f);
 
 		//LakeSurface
