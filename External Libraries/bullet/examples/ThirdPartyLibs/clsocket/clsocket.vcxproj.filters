@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\SimpleSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\ActiveSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\PassiveSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\ActiveSocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\Host.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\PassiveSocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\SimpleSocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\src\StatTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\seb\Desktop\bullet3-2.87\examples\ThirdPartyLibs\clsocket\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A3297DAB-F77E-3327-B4CC-22B465F8AF34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ACB95CC3-6E63-3132-8167-8CA8B6BFBFC5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

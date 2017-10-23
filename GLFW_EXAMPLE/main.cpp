@@ -37,6 +37,8 @@
 #include "LevelData.h"
 #include "TrackSegmentStraight.h"
 
+#include "btBulletDynamicsCommon.h"
+
 const GLint WIDTH = 1920, HEIGHT = 1080;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
@@ -140,8 +142,8 @@ int main() {
 		// Do object movement
 
 	
-		levelData.moveAlongTrack(4, 0.1);
-		levelData.moveAlongTrack(5, 0.1);
+		//levelData.moveAlongTrack(4, 0.1);
+		//levelData.moveAlongTrack(5, 0.1);
 
 
 
