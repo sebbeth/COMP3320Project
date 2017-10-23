@@ -36,6 +36,7 @@ const GLfloat SPEED = 80.0f;
 const GLfloat SENSITIVTY = 0.25f;
 const GLfloat ZOOM = 45.0f;
 const GLfloat CAMERAFLYINSPEED = 50.0f;
+const GLfloat initialFOV = 45.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
@@ -69,6 +70,12 @@ public:
 	glm::mat4 GetViewMatrix()
 	{
 		return glm::lookAt(this->position, this->position + this->front, this->up);
+	}
+
+	// Returns the view matrix calculated using 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 GetProjectionMatrix()
+	{
+		return glm::perspective(glm::radians(initialFOV), 4.0f / 3.0f, 0.1f, 100.0f);
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)

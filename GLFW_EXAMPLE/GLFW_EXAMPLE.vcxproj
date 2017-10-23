@@ -87,9 +87,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\particle.DDS" />
     <Image Include="kitten.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Particle.fs" />
+    <None Include="Particle.vs" />
     <None Include="shaders\2.1.basic_lighting.fs" />
     <None Include="shaders\2.1.basic_lighting.vs" />
     <None Include="shaders\2.1.lamp.fs" />
@@ -103,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
