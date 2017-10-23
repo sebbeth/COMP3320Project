@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\soil\src;$(ProjectDir)\glew\include;$(ProjectDir)\glfw\include;$(ProjectDir)\assimp\include;C:\Users\seb\Desktop\bullet3-2.87\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\soil\src;$(ProjectDir)\glew\include;$(ProjectDir)\glfw\include;$(ProjectDir)\assimp\include;$(ProjectDir)bullet3-2.87\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

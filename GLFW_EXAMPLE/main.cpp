@@ -60,7 +60,7 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(36.0, 200, 200); // Above water -36.0, 50, -70
+glm::vec3 lightPos(36.0, 200, 200);
 
 
 
@@ -78,7 +78,7 @@ int main() {
 
 	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
-	dynamicsWorld->setGravity(btVector3(0, -10, 0));
+	//dynamicsWorld->setGravity(btVector3(0, -10, 0));
 
 
 	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
@@ -101,34 +101,6 @@ int main() {
 	btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
 	dynamicsWorld->addRigidBody(fallRigidBody);
 	
-	for (int i = 0; i < 300; i++) {
-		dynamicsWorld->stepSimulation(1 / 60.f, 10);
-
-		btTransform trans;
-		fallRigidBody->getMotionState()->getWorldTransform(trans);
-
-		std::cout << "sphere height: " << trans.getOrigin().getY() << std::endl;
-	}
-
-	dynamicsWorld->removeRigidBody(fallRigidBody);
-	delete fallRigidBody->getMotionState();
-	delete fallRigidBody;
-
-	dynamicsWorld->removeRigidBody(groundRigidBody);
-	delete groundRigidBody->getMotionState();
-	delete groundRigidBody;
-
-
-	delete fallShape;
-
-	delete groundShape;
-
-
-	delete dynamicsWorld;
-	delete solver;
-	delete collisionConfiguration;
-	delete dispatcher;
-	delete broadphase;
 
 
 
@@ -214,6 +186,24 @@ int main() {
 			levelData.switchTrack(2);
 		}
 
+
+
+
+		/*********************** Bullet ******************************/
+
+		dynamicsWorld->stepSimulation(1 / 60.f, 10);
+
+		btTransform trans;
+		
+		fallRigidBody->setLinearVelocity(btVector3(1, 0, 0));
+
+		fallRigidBody->getMotionState()->getWorldTransform(trans);
+
+		std::cout << "sphere height: "
+			<< trans.getOrigin().getX() << ":" << trans.getOrigin().getY() << 
+			":" << trans.getOrigin().getZ() << std::endl;
+
+		/**************************************************/
 		// Do object movement
 
 	
@@ -334,6 +324,29 @@ int main() {
 		//DRAW OPENGL
 		glfwSwapBuffers(window);
 	}
+
+
+	/********* Close down bullet ******/
+	dynamicsWorld->removeRigidBody(fallRigidBody);
+	delete fallRigidBody->getMotionState();
+	delete fallRigidBody;
+
+	dynamicsWorld->removeRigidBody(groundRigidBody);
+	delete groundRigidBody->getMotionState();
+	delete groundRigidBody;
+
+
+	delete fallShape;
+
+	delete groundShape;
+
+
+	delete dynamicsWorld;
+	delete solver;
+	delete collisionConfiguration;
+	delete dispatcher;
+	delete broadphase;
+
 
 
 	glfwTerminate();
