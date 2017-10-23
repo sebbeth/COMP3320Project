@@ -23,6 +23,9 @@
     <Image Include="kitten.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\Downloads\particle.DDS">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core.frag">
@@ -55,6 +58,12 @@
     <None Include="shaders\4.1.lighting_maps.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Particle.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Particle.fs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -79,6 +88,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Track.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
