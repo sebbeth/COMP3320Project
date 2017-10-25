@@ -17,13 +17,33 @@ public:
 	TrackSegmentStraight *segments[20];
 	Track *next;
 
+
+
 	Track() {
 
 	}
 
+	Track(glm::vec3 input[], int cardinality) {
+
+		int segmentCounter = 0;
+		for (int i = 0; i < cardinality; i++)
+		{
+			this->segments[segmentCounter] = new TrackSegmentStraight(input[i], input[i+1]);
+
+
+			segmentCounter++;
+
+		}
+
+		numberOfSegments = segmentCounter -1;
+	}
+
+	
+
 	void addSegment(int index, glm::vec3 a, glm::vec3 b) {
 
 		segments[index] = new TrackSegmentStraight(a, b);
+	
 
 	}
 

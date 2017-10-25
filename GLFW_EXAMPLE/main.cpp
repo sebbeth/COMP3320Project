@@ -199,15 +199,13 @@ int main() {
 
 		fallRigidBody->getMotionState()->getWorldTransform(trans);
 
-		std::cout << "sphere height: "
-			<< trans.getOrigin().getX() << ":" << trans.getOrigin().getY() << 
-			":" << trans.getOrigin().getZ() << std::endl;
+		
 
 		/**************************************************/
 		// Do object movement
 
 	
-		//levelData.moveAlongTrack(4, 0.1);
+		levelData.moveAlongTrack(4, 0.4);
 		//levelData.moveAlongTrack(5, 0.1);
 
 

@@ -59,16 +59,20 @@ public:
 		// x, z, -y
 
 		//Ground object
-	//	loadObject(0, "models/mountian6.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
+		loadObject(0, "models/mountian6.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
 		//loadObject(1, "models/mountianBottom.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f);
 
 		//LakeSurface
 		loadObject(2, "models/lake.obj", glm::vec3(-43.9515f, -11.4736f, -61.1416f), 0.1f);
 		//loadObject(3, "models/mountianMirror.obj", glm::vec3(-7.1f, 10.55f, -6.1f), 0.0f);
 
+		glm::vec3 points[] = { glm::vec3(-9.2, -10.6, 76),
+			glm::vec3(-53, -10.1, 36),
+			glm::vec3(-67, -10, 55.1),
+			glm::vec3(-67, -10, 56.1),
+			glm::vec3(-65, -10.7, 46)};
 
-
-		 track = new Track;
+		 track = new Track(points,5);
 		 track2 = new Track;
 		 track3 = new Track;
 
@@ -76,10 +80,11 @@ public:
 		track2->next = track3;
 		track3->next = track;
 
-		track->addSegment(0, glm::vec3(-9.2, -10.6, 76), glm::vec3(-50, -10, 73));
-		track->addSegment(1, glm::vec3(-50, -10, 73), glm::vec3(-67, -10, 55.1));
-		track->addSegment(2, glm::vec3(-67, -10, 55.1), glm::vec3(-65, -10.7, 46));
-		track->setNumberOfSegments(3);
+	//	track->addSegment(0, glm::vec3(-9.2, -10.6, 76), glm::vec3(-50, -10, 73));
+	//	track->addSegment(1, glm::vec3(-50, -10, 73), glm::vec3(-67, -10, 55.1));
+	//	track->addSegment(2, glm::vec3(-67, -10, 55.1), glm::vec3(-65, -10.7, 46));
+
+	//	track->setNumberOfSegments(3);
 
 
 		track2->addSegment(0, glm::vec3(-65, -10.7, 46), glm::vec3(-53, -10.1, 36));
