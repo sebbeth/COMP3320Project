@@ -193,6 +193,13 @@ public:
 
 
 	}
+
+	GLfloat getRotation(int segment, int nodeCurrent, int nextNode) {
+
+		GLfloat value = atan2((sections.at(segment).at(nextNode).x - sections.at(segment).at(nodeCurrent).x), (sections.at(segment).at(nextNode).z - sections.at(segment).at(nodeCurrent).z));
+		return value *(180.0 / 3.14159265);
+
+	}
 	
 
 private:

@@ -6,15 +6,21 @@ public:
 
 	glm::vec3 position;
 	glm::vec3 rotation;
+	GLfloat rotationTarget;
+	GLfloat currentRotation;
 	int currentNode;
 	int currentSection;
 	GLfloat velocity;
 	GLfloat maxVelocity;
+	int gameObjectIndex;
+	glm::vec3 offset;
 
 	PhysicsObject() {
 		currentNode = 0;
+		currentRotation = 0;
 		velocity = 0.0;
 		maxVelocity = 0.7;
+		offset = glm::vec3(0.8, 0, 0.8);
 	}
 
 	glm::vec3 getIteratedPosition(glm::vec3 nextNode) {
@@ -38,6 +44,33 @@ public:
 		
 		return output;
 	}
+
+
+	GLfloat getDeltaRotation() {
+
+
+		if (abs(rotationTarget - currentRotation) < 1) {
+			currentRotation = rotationTarget;
+			return currentRotation;
+		}
+
+		if (rotationTarget > currentRotation) {
+			currentRotation = currentRotation + abs(rotationTarget - currentRotation) / 2;
+		}
+		else {
+			currentRotation = currentRotation - abs(rotationTarget - currentRotation) / 2;
+
+		}
+
+		std::cout << "TARGET " << rotationTarget << ":" << currentRotation << endl;
+
+
+		return currentRotation;
+
+	}
+
+
+	
 
 private:
 

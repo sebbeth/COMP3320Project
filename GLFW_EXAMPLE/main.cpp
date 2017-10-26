@@ -72,9 +72,9 @@ Track track;
 
 
 
+const int numberOfTrains = 1;
 
-PhysicsObject train;
-
+PhysicsObject trains[numberOfTrains];
 
 /********* /TEST **********/
 
@@ -252,9 +252,20 @@ int main() {
 	track.addSection(levelData.objects[18].model.getVertices());
 
 
-	train.currentSection = 7;
-	train.position = track.getTrackSection(train.currentSection).at(0);
+	
+	/*
+	trains[0].currentSection = 2;
+	trains[0].currentNode = 80;
+	trains[0].gameObjectIndex = 6;
+	trains[0].position = track.getTrackSection(trains[0].currentSection).at(trains[0].currentNode);
+	*/
 
+	trains[0].currentSection = 7;
+	trains[0].currentNode = 30;
+	trains[0].gameObjectIndex = 6;
+	trains[0].position = track.getTrackSection(trains[0].currentSection).at(trains[0].currentNode);
+
+	
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
@@ -322,50 +333,56 @@ int main() {
 		glfwPollEvents();
 		DoMovement();
 
-		if (keys[GLFW_KEY_EQUAL]) {
-			train.velocity += 0.01;
+		for (int i = 0; i < numberOfTrains; i++)
+		{
+
+			if (keys[GLFW_KEY_EQUAL]) {
+
+				for (int i = 0; i < 1; i++)
+				{
+					trains[i].velocity += 0.01;
+
+					if (abs(trains[i].velocity) >= trains[i].maxVelocity) {
+						trains[i].velocity = trains[i].maxVelocity;
+					}
+				}
 			
-			if (abs(train.velocity) >= train.maxVelocity) {
-				train.velocity = train.maxVelocity;
-			}
 
-
-		}
-		if (keys[GLFW_KEY_MINUS]) {
-			train.velocity -= 0.01;
-			if (train.velocity <= -train.maxVelocity) {
-				train.velocity = -train.maxVelocity;
-			}
-		}
-
-		if (keys[GLFW_KEY_SPACE]) {
-			if (train.velocity > 0.01) {
-				train.velocity -= 0.007;
 
 			}
-			else {
+			if (keys[GLFW_KEY_MINUS]) {
+				trains[i].velocity -= 0.01;
+				if (trains[i].velocity <= -trains[i].maxVelocity) {
+					trains[i].velocity = -trains[i].maxVelocity;
+				}
+			}
 
-				if (abs(train.velocity) < 0.01) {
-					train.velocity = 0;
+			if (keys[GLFW_KEY_SPACE]) {
+				if (trains[i].velocity > 0.01) {
+					trains[i].velocity -= 0.007;
+
 				}
 				else {
-					train.velocity += 0.007;
+
+					if (abs(trains[i].velocity) < 0.01) {
+						trains[i].velocity = 0;
+					}
+					else {
+						trains[i].velocity += 0.007;
+
+					}
 
 				}
-
-
 			}
 		}
 
 		if (keys[GLFW_KEY_1]) {
-			track.changeUpcomingSwitch(train.velocity,train.currentSection,1);
+			track.changeUpcomingSwitch(trains[0].velocity, trains[0].currentSection, 1);
 		}
 
 		if (keys[GLFW_KEY_2]) {
-			track.changeUpcomingSwitch(train.velocity, train.currentSection, 0);
+			track.changeUpcomingSwitch(trains[0].velocity, trains[0].currentSection, 0);
 		}
-
-
 
 
 		/*********************** Bullet ******************************/
@@ -513,7 +530,7 @@ int main() {
 		for (size_t i = 1; i < levelData.getCardinality(); i++)
 		{
 
-			if (i != 3) {
+			if ( (i != 3) ) {
 
 				ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
 				ourShader.setFloat("material.shininess", 64.0f);
@@ -572,7 +589,7 @@ int main() {
 					p.position += p.speed * (float)deltaTime; 
 					p.cameradistance = glm::length2(p.position - CameraPosition);
 					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
-					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, train.position)));
+					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, trains[0].position)));
 					p.model.Draw(ourShader);
 				}
 				else {
@@ -649,27 +666,31 @@ int main() {
 			/*************************************/
 
 		
-			if (train.velocity >= 0) { // Going forward
+		for (int i = 0; i < numberOfTrains; i++)
+		{
 
-				if (train.currentSection != -1) {
-					if (vertexEquality(train.position, track.getTrackSection(train.currentSection).at(train.currentNode + 1))) {
+
+			if (trains[0].velocity >= 0) { // Going forward
+
+				if (trains[i].currentSection != -1) {
+					if (vertexEquality(trains[i].position, track.getTrackSection(trains[i].currentSection).at(trains[i].currentNode + 1))) {
 
 						std::cout << "Next" << endl;
-						train.currentNode++;
+						trains[i].currentNode++;
 
-						if (train.currentNode == track.getTrackSection(train.currentSection).size() - 1) {
+						if (trains[i].currentNode == track.getTrackSection(trains[i].currentSection).size() - 1) {
 							std::cout << "END" << endl;
-							train.currentSection = track.getNextSection(train.currentSection, 1);
-							std::cout << "New " << train.currentSection <<  endl;
+							trains[i].currentSection = track.getNextSection(trains[i].currentSection, 1);
+							std::cout << "New " << trains[i].currentSection << endl;
 
-							if (train.currentSection == -1) {
-								train.velocity = 0;
+							if (trains[i].currentSection == -1) {
+								trains[0].velocity = 0;
 								std::cout << "STOP!" << endl;
-								train.currentNode = train.currentNode - 1;
+								trains[i].currentNode = trains[i].currentNode - 1;
 							}
 							else {
 
-								train.currentNode = 0;
+								trains[i].currentNode = 0;
 
 							}
 
@@ -680,28 +701,28 @@ int main() {
 			}
 			else { // Going backward
 
-				if (train.currentSection != -1) {
+				if (trains[i].currentSection != -1) {
 
-					int nextNode = train.currentNode - 1;
-					if (safeNodeLookup(nextNode, train.currentSection)) {
-						if (vertexEquality(train.position, track.getTrackSection(train.currentSection).at(nextNode))) {
+					int nextNode = trains[i].currentNode - 1;
+					if (safeNodeLookup(nextNode, trains[i].currentSection)) {
+						if (vertexEquality(trains[i].position, track.getTrackSection(trains[i].currentSection).at(nextNode))) {
 
 							std::cout << "Prev" << endl;
-							train.currentNode--;
+							trains[i].currentNode--;
 
-							if (train.currentNode == 1) {
+							if (trains[i].currentNode == 1) {
 								std::cout << "END" << endl;
-								train.currentSection = track.getNextSection(train.currentSection, -1);
-								std::cout << "New " << train.currentSection << endl;
+								trains[i].currentSection = track.getNextSection(trains[i].currentSection, -1);
+								std::cout << "New " << trains[i].currentSection << endl;
 
-								if (train.currentSection == -1) {
-									train.velocity = 0;
+								if (trains[i].currentSection == -1) {
+									trains[0].velocity = 0;
 									std::cout << "STOP!" << endl;
-									train.currentNode = train.currentNode + 1;
+									trains[i].currentNode = trains[i].currentNode + 1;
 								}
 								else {
 
-									train.currentNode = track.sections.at(train.currentSection).size();
+									trains[i].currentNode = track.sections.at(trains[i].currentSection).size();
 
 								}
 
@@ -720,43 +741,63 @@ int main() {
 
 			 transitionMatrix = glm::translate(transitionMatrix, train.getIteratedPosition(track1->path.at(train.currentNode + 1)));
 			 */
-			/*
-			glm::mat4 direction = glm::lookAt(
-				train.position, 
-				train.position + track1->path.at(train.currentNode + 1), 
-				glm::vec3(0, 10, 0)
-			);*/
+			 /*
+			 glm::mat4 direction = glm::lookAt(
+				 train.position,
+				 train.position + track1->path.at(train.currentNode + 1),
+				 glm::vec3(0, 10, 0)
+			 );*/
 			glm::mat4 output = glm::mat4();
 			glm::mat4  direction = glm::mat4();
-			if (safeNodeLookup(train.currentNode + 1, train.currentSection)) { //train.currentSection != -1
-				
+			if (safeNodeLookup(trains[i].currentNode + 1, trains[i].currentSection)) { //train.currentSection != -1
+				/*
 				direction = glm::lookAt(
 					glm::vec3(0, 0, 0),
-					train.getRotation(track.getTrackSection(train.currentSection).at(train.currentNode + 1)),
+					trains[i].getRotation(track.getTrackSection(trains[i].currentSection).at(trains[i].currentNode + 1)),
 					glm::vec3(0, 1, 0)
-				);
-			
+				);*/
+
 			}
-				glm::mat4 translation;
+			glm::mat4 translation;
 
-				if (train.velocity >= 0) {
-					translation = glm::translate(glm::mat4(), train.getIteratedPosition(track.getTrackSection(train.currentSection).at(train.currentNode + 1)));
+			if (trains[0].velocity >= 0) {
+				translation = glm::translate(glm::mat4(), trains[i].getIteratedPosition(track.getTrackSection(trains[i].currentSection).at(trains[i].currentNode + 1)));
 
+			}
+			else {
+				translation = glm::translate(glm::mat4(), trains[i].getIteratedPosition(track.getTrackSection(trains[i].currentSection).at(trains[i].currentNode - 1)));
+
+
+			}
+			if (safeNodeLookup(trains[i].currentNode + 2, trains[i].currentSection)) { //train.currentSection != -1
+
+				GLfloat rotation = track.getRotation(trains[i].currentSection, trains[i].currentNode, trains[i].currentNode + 2);
+
+				if (rotation != trains[i].currentRotation) {
+
+					trains[i].rotationTarget = rotation;
 				}
-				else {
-					translation = glm::translate(glm::mat4(), train.getIteratedPosition(track.getTrackSection(train.currentSection).at(train.currentNode - 1)));
 
-				}
+			}
 
-			output =  translation * direction; 
-			
+			translation = glm::rotate(translation, trains[i].getDeltaRotation() - 90.0f, glm::vec3(0, 1, 0));
 
-			ourShader.setVec3("material.specular", levelData.getObjectShininess(6), levelData.getObjectShininess(6), levelData.getObjectShininess(6));
+
+			glm::mat4 offset = glm::translate(glm::mat4(), trains[i].offset);
+
+			output = translation * offset;
+
+
+			ourShader.setVec3("material.specular", levelData.getObjectShininess(trains[i].gameObjectIndex), levelData.getObjectShininess(trains[i].gameObjectIndex), levelData.getObjectShininess(trains[i].gameObjectIndex));
 			ourShader.setFloat("material.shininess", 64.0f);
 
 			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(output));
 
-			levelData.getModel(6).Draw(ourShader);
+			levelData.getModel(trains[i].gameObjectIndex).Draw(ourShader);
+
+
+
+		}
 
 			/************************************/
 			/*************************************/
