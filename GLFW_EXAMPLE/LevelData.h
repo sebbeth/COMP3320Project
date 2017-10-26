@@ -222,6 +222,15 @@ public:
 
 		loadObject(6, "models/SteamEngine.obj", glm::vec3(0,0,0), 0.0f);
 
+		loadObject(11, "models/1.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(12, "models/2.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(13, "models/3.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(14, "models/4.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(15, "models/5.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(16, "models/6.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(17, "models/7.obj", glm::vec3(0, 0, 0), 0.0f);
+
+
 		/*
 		objects[4].track = track;
 		objects[4].segmentOnTrack = 0;

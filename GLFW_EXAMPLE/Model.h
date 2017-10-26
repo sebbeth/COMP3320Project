@@ -68,7 +68,7 @@ public:
 
 		// Walk through each of the mesh's vertices
 	/*
-		for (GLuint i = 0; i < mesh->mNumVertices; i++)
+		for (GLuint i = 0; i < meshes.at(0)->mNumVertices; i++)
 		{
 			Vertex vertex;
 			glm::vec3 vector; // We declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
@@ -80,8 +80,8 @@ public:
 
 
 
-		}
-		*/
+		}*/
+		
 		vector<glm::vec3> output;
 
 			for (int i = 0; i < this->meshes.size(); i++)

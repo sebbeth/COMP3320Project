@@ -158,7 +158,7 @@ vector<glm::vec3> p1 = {
 
 
 
-Track *track1 = new Track(p1);
+Track track;
 
 
 
@@ -207,7 +207,7 @@ glm::vec3 getDirectonVector(glm::vec3 position, glm::vec3 target) {
 
 int main() {
 
-	
+//	track1.path = p1;
 
 
 	/*
@@ -256,6 +256,9 @@ int main() {
 
 	// BULLET
 
+
+
+
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -301,6 +304,22 @@ int main() {
 	// Load the level data object, it contans all the data for the game's initial state.
 
 	LevelData levelData;
+
+
+
+
+
+	/**** LOAD TRACKS */
+
+
+	track.addSection(levelData.objects[11].model.getVertices());
+	track.addSection(levelData.objects[12].model.getVertices());
+	track.addSection(levelData.objects[13].model.getVertices());
+	track.addSection(levelData.objects[14].model.getVertices());
+	track.addSection(levelData.objects[15].model.getVertices());
+	track.addSection(levelData.objects[16].model.getVertices());
+	track.addSection(levelData.objects[17].model.getVertices());
+
 
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
@@ -467,25 +486,25 @@ int main() {
 		
 			if (train.velocity >= 0) { // Going forward
 
-				if (vertexEquality(train.position, track1->path.at(train.currentNode + 1))) {
+				if (vertexEquality(train.position, track.getTrackSection(0).at(train.currentNode + 1))) {
 
 					std::cout << "Next" << endl;
 					train.currentNode++;
 
-					if (train.currentNode == track1->path.size() - 1) {
+					if (train.currentNode == track.getTrackSection(0).size() - 1) {
 						train.currentNode = 0;
 					}
 				}
 			}
 			else { // Going backward
 
-				if (vertexEquality(train.position, track1->path.at(train.currentNode - 1))) {
+				if (vertexEquality(train.position, track.getTrackSection(0).at(train.currentNode - 1))) {
 
 					std::cout << "Prev" << endl;
 					train.currentNode--;
 
 					if (train.currentNode == 0) {
-						train.currentNode = track1->path.size() - 1;
+						train.currentNode = track.getTrackSection(0).size() - 1;
 					}
 				}
 			}
@@ -510,11 +529,11 @@ int main() {
 
 			glm::mat4 direction = glm::lookAt(
 				glm::vec3(0, 0, 0),
-				train.getRotation(track1->path.at(train.currentNode + 4)),
+				train.getRotation(track.getTrackSection(0).at(train.currentNode + 4)),
 				glm::vec3(0, 1, 0)
 			);
 
-			glm::mat4 translation = glm::translate(glm::mat4(), train.getIteratedPosition(track1->path.at(train.currentNode + 1)));
+			glm::mat4 translation = glm::translate(glm::mat4(), train.getIteratedPosition(track.getTrackSection(0).at(train.currentNode + 1)));
 
 			glm::mat4 output =  translation * direction;
 
