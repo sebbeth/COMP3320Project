@@ -62,8 +62,11 @@ glm::vec3 lightPos(36.0, 200, 200); // Above water -36.0, 50, -70
 
 //Particles
 const int MaxParticles = 100;
+const int MaxParticlesTrain = 50;
 GameObject ParticlesContainer[MaxParticles];
+GameObject ParticlesContainerTrain[MaxParticlesTrain];
 int LastUsedParticle = 0;
+int LastUsedParticleTrain = 0;
 
 // Finds a Particle in ParticlesContainer which isn't used yet.
 // (i.e. life < 0);
@@ -85,9 +88,32 @@ int FindUnusedParticle() {
 
 	return 0; // All particles are taken, override the first one
 }
+// Finds a Particle in ParticlesContainer which isn't used yet.
+// (i.e. life < 0);
+int FindUnusedParticleTrain() {
+
+	for (int i = LastUsedParticle; i<MaxParticlesTrain; i++) {
+		if (ParticlesContainerTrain[i].life < 0) {
+			LastUsedParticleTrain = i;
+			return i;
+		}
+	}
+
+	for (int i = 0; i<LastUsedParticleTrain; i++) {
+		if (ParticlesContainerTrain[i].life < 0) {
+			LastUsedParticleTrain = i;
+			return i;
+		}
+	}
+
+	return 0; // All particles are taken, override the first one
+}
 
 void SortParticles() {
 	std::sort(&ParticlesContainer[0], &ParticlesContainer[MaxParticles]);
+}
+void SortParticlesTrain() {
+	std::sort(&ParticlesContainerTrain[0], &ParticlesContainerTrain[MaxParticlesTrain]);
 }
 
 
@@ -178,9 +204,25 @@ int main() {
 		}
 	}
 
+	int modelNoTrain = 1;
+	for (int i = 0; i<MaxParticlesTrain; i++) {
+		ParticlesContainerTrain[i].life = -1.0f;
+		ParticlesContainerTrain[i].cameradistance = -1.0f;
+		//ParticlesContainer[i].model.load("models/particle.obj");
+		if (modelNoTrain == 1) {
+			ParticlesContainerTrain[i].model.load("models/smoke1.obj");
+			modelNoTrain++;
+		}
+		else{
+			ParticlesContainerTrain[i].model.load("models/smoke2.obj");
+			modelNoTrain = 1;
+		}
+	}
+
 	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
 	glm::vec3 particlePosition = glm::vec3(0,0,0);
 	glm::vec3 particleOffsetPosition = glm::vec3(-58.7f, 2.0f, 40.5f);
+	glm::vec3 particleOffsetPositionTrain = glm::vec3(0, 0, 0);
 	glm::mat4 defaultTranslationMatrix = ParticlesContainer[0].translationMatrix;
 
 	GLfloat lastFrame = glfwGetTime();
@@ -206,6 +248,7 @@ int main() {
 		levelData.moveAlongTrack(4, 0.1);
 		levelData.moveAlongTrack(5, 0.1);
 
+		particleOffsetPositionTrain = levelData.objects[4].position;
 		//render
 		glClearColor(0.47f, 0.67f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -226,6 +269,55 @@ int main() {
 			int particleIndex = FindUnusedParticle();
 			GameObject& p = ParticlesContainer[particleIndex];
 			p.life = 1.5f; // This particle will live 5 seconds.
+			p.specular = 0.0f;
+			p.position = particlePosition;
+			p.translationMatrix = defaultTranslationMatrix;
+			p.thetaRotation = 0.0f;
+			p.rotation = 0.0f;
+			p.orientationVector = glm::vec3(0, 1.0f, 0);
+
+
+			float spread = 0.3f;
+			glm::vec3 maindir = glm::vec3(1.0f, 1.0f, 1.0f);
+			// Very bad way to generate a random direction; 
+			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
+			// combined with some user-controlled parameters (main direction, spread, etc)
+			/*
+			glm::vec3 randomdir = glm::vec3(
+				(rand() % 2000 - 100.0f) / 100.0f,
+				//0.0f,
+				(rand() % 2000 - 100.0f) / 100.0f,
+				//0.0f
+				(rand() % 2000 - 100.0f) / 100.0f
+			);
+			*/
+			glm::vec3 randomdir = glm::vec3(
+				(rand() % 4000 - 1000.0f) / 800.0f,
+				//0.0f,
+				(rand() % 4000 - 1000.0f) / 800.0f,
+				//0.0f
+				(rand() % 4000 - 1000.0f) / 800.0f
+			);
+
+			p.speed = maindir + randomdir*spread;
+
+
+			p.size = (rand() % 1000) / 2000.0f + 0.1f;
+
+			//particlePosition += glm::vec3(0.0f, 5.0f, 0.0f);
+		}
+
+		// Generate 10 new particule each millisecond,
+		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
+		// newparticles will be huge and the next frame even longer.
+		int newparticlesTrain = (int)(deltaTime*100.0);
+		if (newparticlesTrain > (int)(0.016f*100.0))
+			newparticlesTrain = (int)(0.016f*100.0);
+
+		for (int i = 0; i < newparticlesTrain; i++) {
+			int particleIndexTrain = FindUnusedParticleTrain();
+			GameObject& p = ParticlesContainerTrain[particleIndexTrain];
+			p.life = 0.3f; // This particle will live 5 seconds.
 			p.specular = 0.0f;
 			p.position = particlePosition;
 			p.translationMatrix = defaultTranslationMatrix;
@@ -325,6 +417,33 @@ int main() {
 			}
 		}
 		SortParticles();
+
+		// Simulate all particles
+		for (int i = 0; i<MaxParticlesTrain; i++) {
+
+			GameObject& p = ParticlesContainerTrain[i]; // shortcut
+
+			if (p.life > 0.0f) {
+
+				// Decrease life
+				p.life -= deltaTime;
+				if (p.life > 0.0f) {
+
+					// Simulate simple physics : gravity only, no collisions
+					p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
+					p.position += p.speed * (float)deltaTime; 
+					p.cameradistance = glm::length2(p.position - CameraPosition);
+					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
+					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, particleOffsetPositionTrain)));
+					p.model.Draw(ourShader);
+				}
+				else {
+					// Particles that just died will be put at the end of the buffer in SortParticles();
+					p.cameradistance = -1.0f;
+				}
+			}
+		}
+		SortParticlesTrain();
 
 		ourShader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
 
