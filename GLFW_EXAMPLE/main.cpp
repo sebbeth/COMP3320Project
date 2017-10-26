@@ -264,55 +264,6 @@ void SortParticlesTrain() {
 
 int main() {
 
-//	track1.path = p1;
-
-
-	/*
-	btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-
-	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-
-	//dynamicsWorld->setGravity(btVector3(0, -10, 0));
-
-
-	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
-
-	btCollisionShape* fallShape = new btSphereShape(1);
-
-
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
-	btRigidBody::btRigidBodyConstructionInfo
-		groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-	dynamicsWorld->addRigidBody(groundRigidBody);
-
-	btDefaultMotionState* fallMotionState =
-		new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
-	btScalar mass = 1;
-	btVector3 fallInertia(0, 0, 0);
-	fallShape->calculateLocalInertia(mass, fallInertia);
-	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
-	btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
-	dynamicsWorld->addRigidBody(fallRigidBody);
-	
-
-
-
-
-
-
-
-	*/
-
-
-
-	// BULLET
-
 
 
 
@@ -379,6 +330,7 @@ int main() {
 	track.addSection(levelData.objects[15].model.getVertices());
 	track.addSection(levelData.objects[16].model.getVertices());
 	track.addSection(levelData.objects[17].model.getVertices());
+	track.addSection(levelData.objects[18].model.getVertices());
 
 
 
@@ -432,7 +384,7 @@ int main() {
 
 	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
 	glm::vec3 particlePosition = glm::vec3(0,0,0);
-	glm::vec3 particleOffsetPosition = glm::vec3(-58.7f, 2.0f, 40.5f);
+	glm::vec3 particleOffsetPosition = glm::vec3(-50.48, -8.3, 46.82);
 	glm::vec3 particleOffsetPositionTrain = glm::vec3(0, 0, 0);
 	glm::mat4 defaultTranslationMatrix = ParticlesContainer[0].translationMatrix;
 
@@ -448,23 +400,37 @@ int main() {
 		glfwPollEvents();
 		DoMovement();
 
-		if (keys[GLFW_KEY_1]) {
-			//levelData.switchTrack(1);
+		if (keys[GLFW_KEY_EQUAL]) {
+
 			train.velocity += 0.01;
-			/*
-			if (abs(velocity) >= maxVelocity) {
-				velocity = maxVelocity;
-			}*/
+			
+			if (abs(train.velocity) >= train.maxVelocity) {
+				train.velocity = train.maxVelocity;
+			}
 
 
 		}
-		if (keys[GLFW_KEY_2]) {
+		if (keys[GLFW_KEY_MINUS]) {
 			//levelData.switchTrack(2);
 			train.velocity -= 0.01;
 			if (train.velocity < 0) {
 				train.velocity = 0;
 			}
 			
+		}
+
+		if (keys[GLFW_KEY_1]) {
+
+		
+			track.changeUpcomingSwitch(train.velocity,train.currentSection,1);
+
+		}
+
+		if (keys[GLFW_KEY_2]) {
+			
+			track.changeUpcomingSwitch(train.velocity, train.currentSection, 0);
+
+
 		}
 
 
@@ -674,7 +640,7 @@ int main() {
 					p.position += p.speed * (float)deltaTime; 
 					p.cameradistance = glm::length2(p.position - CameraPosition);
 					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
-					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, particleOffsetPositionTrain)));
+					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, train.position)));
 					p.model.Draw(ourShader);
 				}
 				else {
@@ -753,6 +719,7 @@ int main() {
 		
 			if (train.velocity >= 0) { // Going forward
 
+				if (train.currentSection != -1) {
 				if (vertexEquality(train.position, track.getTrackSection(train.currentSection).at(train.currentNode + 1))) {
 
 					std::cout << "Next" << endl;
@@ -762,9 +729,21 @@ int main() {
 						std::cout << "END" << endl;
 						train.currentSection = track.getNextSection(train.currentSection, 1);
 						std::cout << "New " << train.currentSection <<  endl;
-						train.currentNode = 0;
+
+						if (train.currentSection == -1) {
+							train.velocity = 0;
+							std::cout << "STOP!" << endl;
+							train.currentNode = train.currentNode - 1;
+						}
+						else {
+
+							train.currentNode = 0;
+
+						}
+
 
 					}
+				}
 				}
 			}
 			else { // Going backward
@@ -794,20 +773,20 @@ int main() {
 				train.position + track1->path.at(train.currentNode + 1), 
 				glm::vec3(0, 10, 0)
 			);*/
+			glm::mat4 output = glm::mat4();
 
+			if (train.currentSection != -1) {
+				glm::mat4  direction = glm::lookAt(
+					glm::vec3(0, 0, 0),
+					train.getRotation(track.getTrackSection(train.currentSection).at(train.currentNode + 1)),
+					glm::vec3(0, 1, 0)
+				);
 			
-
-
-			glm::mat4 direction = glm::lookAt(
-				glm::vec3(0, 0, 0),
-				train.getRotation(track.getTrackSection(train.currentSection).at(train.currentNode + 1)),
-				glm::vec3(0, 1, 0)
-			);
 
 			glm::mat4 translation = glm::translate(glm::mat4(), train.getIteratedPosition(track.getTrackSection(train.currentSection).at(train.currentNode + 1)));
 
-			glm::mat4 output =  translation * direction;
-
+			output =  translation * direction;
+			}
 
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(6), levelData.getObjectShininess(6), levelData.getObjectShininess(6));
 			ourShader.setFloat("material.shininess", 64.0f);

@@ -238,6 +238,7 @@ public:
 		loadObject(15, "models/5.obj", glm::vec3(0, 0, 0), 0.0f);
 		loadObject(16, "models/6.obj", glm::vec3(0, 0, 0), 0.0f);
 		loadObject(17, "models/7.obj", glm::vec3(0, 0, 0), 0.0f);
+		loadObject(18, "models/8.obj", glm::vec3(0, 0, 0), 0.0f);
 
 
 		/*
