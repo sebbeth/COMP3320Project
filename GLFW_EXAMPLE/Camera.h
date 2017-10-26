@@ -32,7 +32,7 @@ enum Camera_Movement
 // Default camera values
 const GLfloat YAW = -90.0f;
 const GLfloat PITCH = 0.0f;
-const GLfloat SPEED = 80.0f;
+const GLfloat SPEED = 40.0f;
 const GLfloat SENSITIVTY = 0.25f;
 const GLfloat ZOOM = 45.0f;
 const GLfloat CAMERAFLYINSPEED = 50.0f;
@@ -218,7 +218,7 @@ private:
 
 	bool flyInMode = false;
 	GLfloat flyInSpeed = CAMERAFLYINSPEED;
-	GLfloat flyInEndPosition = 350.0f;
+	GLfloat flyInEndPosition = 150.0f;
 
 
 	// Calculates the front vector from the Camera's (updated) Eular Angles

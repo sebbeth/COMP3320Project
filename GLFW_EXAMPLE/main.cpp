@@ -43,7 +43,7 @@
 //#include "btBulletDynamicsCommon.h"
 
 
-const GLint WIDTH = 1280, HEIGHT = 720;
+const GLint WIDTH = 1280, HEIGHT = 720; //1280, HEIGHT = 720;
 
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
@@ -53,7 +53,7 @@ void MouseCallback(GLFWwindow *window, double xPos, double yPos);
 void DoMovement();
 
 //Default Camera Variables
-Camera camera(glm::vec3(0.0f, 20.0f, 90.0f));
+Camera camera(glm::vec3(0.0f, 80.0f, 450.0f));
 GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
@@ -125,8 +125,8 @@ glm::vec3 getDirectonVector(glm::vec3 position, glm::vec3 target) {
 }
 
 //Particles
-const int MaxParticles = 100;
-const int MaxParticlesTrain = 50;
+const int MaxParticles = 50;
+const int MaxParticlesTrain = 25;
 GameObject ParticlesContainer[MaxParticles];
 GameObject ParticlesContainerTrain[MaxParticlesTrain];
 int LastUsedParticle = 0;
@@ -312,7 +312,7 @@ int main() {
 
 	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
 	glm::vec3 particlePosition = glm::vec3(0,0,0);
-	glm::vec3 particleOffsetPosition = glm::vec3(-50.48, -8.3, 46.82);
+	glm::vec3 particleOffsetPosition = glm::vec3(-51.48, -8.3, 46.82);
 	glm::vec3 particleOffsetPositionTrain = glm::vec3(0, 0, 0);
 	glm::mat4 defaultTranslationMatrix = ParticlesContainer[0].translationMatrix;
 
@@ -331,21 +331,20 @@ int main() {
 		for (int i = 0; i < numberOfTrains; i++)
 		{
 
-			if (keys[GLFW_KEY_EQUAL]) {
+			if (keys[GLFW_KEY_MINUS]) {
 
-				for (int i = 0; i < 1; i++)
-				{
+				
 					trains[i].velocity += 0.01;
 
 					if (abs(trains[i].velocity) >= trains[i].maxVelocity) {
 						trains[i].velocity = trains[i].maxVelocity;
 					}
-				}
+			
 			
 
 
 			}
-			if (keys[GLFW_KEY_MINUS]) {
+			if (keys[GLFW_KEY_EQUAL]) {
 				trains[i].velocity -= 0.01;
 				if (trains[i].velocity <= -trains[i].maxVelocity) {
 					trains[i].velocity = -trains[i].maxVelocity;
@@ -645,17 +644,17 @@ int main() {
 				if (trains[i].currentSection != -1) {
 					if (vertexEquality(trains[i].position, track.getTrackSection(trains[i].currentSection).at(trains[i].currentNode + 1))) {
 
-						std::cout << "Next" << endl;
+
 						trains[i].currentNode++;
 
 						if (trains[i].currentNode == track.getTrackSection(trains[i].currentSection).size() - 1) {
-							std::cout << "END" << endl;
+
 							trains[i].currentSection = track.getNextSection(trains[i].currentSection, 1);
-							std::cout << "New " << trains[i].currentSection << endl;
+
 
 							if (trains[i].currentSection == -1) {
 								trains[0].velocity = 0;
-								std::cout << "STOP!" << endl;
+
 								trains[i].currentNode = trains[i].currentNode - 1;
 							}
 							else {
@@ -677,17 +676,17 @@ int main() {
 					if (safeNodeLookup(nextNode, trains[i].currentSection)) {
 						if (vertexEquality(trains[i].position, track.getTrackSection(trains[i].currentSection).at(nextNode))) {
 
-							std::cout << "Prev" << endl;
+
 							trains[i].currentNode--;
 
 							if (trains[i].currentNode == 1) {
-								std::cout << "END" << endl;
+
 								trains[i].currentSection = track.getNextSection(trains[i].currentSection, -1);
-								std::cout << "New " << trains[i].currentSection << endl;
+
 
 								if (trains[i].currentSection == -1) {
 									trains[0].velocity = 0;
-									std::cout << "STOP!" << endl;
+
 									trains[i].currentNode = trains[i].currentNode + 1;
 								}
 								else {
