@@ -98,8 +98,8 @@ public:
 
 		TrackSwitch b3;
 		b3.incoming = 3;
-		b3.outgoingA = 0;
-		b3.outgoingB = 1;
+		b3.outgoingA = 1;
+		b3.outgoingB = 0;
 
 
 		TrackSwitch b4;
@@ -114,8 +114,8 @@ public:
 
 		TrackSwitch b6;
 		b6.incoming = 6;
-		b6.outgoingA = 5;
-		b6.outgoingB = 7;
+		b6.outgoingA = 7;
+		b6.outgoingB = 5;
 
 		TrackSwitch b7;
 		b7.incoming = 7;
