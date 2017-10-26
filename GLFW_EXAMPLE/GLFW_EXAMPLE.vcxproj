@@ -85,9 +85,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParticleShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Downloads\particle.DDS" />
     <Image Include="kitten.png" />
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +110,7 @@
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="shader_m.h" />
     <ClInclude Include="Track.h" />
