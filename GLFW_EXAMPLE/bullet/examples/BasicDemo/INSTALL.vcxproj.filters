@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\seb\git-master\COMP3320Project\GLFW_EXAMPLE\bullet\CMakeFiles\d5a58267256bd7c6734fff56b2e0367a\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7FFD7F3E-D658-3EAA-B4EB-2F9FC2EBCAE3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

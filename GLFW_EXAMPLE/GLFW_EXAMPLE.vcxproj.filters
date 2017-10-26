@@ -87,6 +87,12 @@
     <ClInclude Include="TrackSegmentStraight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackOld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Track.h">
       <Filter>Header Files</Filter>
     </ClInclude>
