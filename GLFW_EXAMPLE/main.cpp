@@ -253,17 +253,12 @@ int main() {
 
 
 	
-	/*
+	
 	trains[0].currentSection = 2;
 	trains[0].currentNode = 80;
 	trains[0].gameObjectIndex = 6;
 	trains[0].position = track.getTrackSection(trains[0].currentSection).at(trains[0].currentNode);
-	*/
-
-	trains[0].currentSection = 7;
-	trains[0].currentNode = 30;
-	trains[0].gameObjectIndex = 6;
-	trains[0].position = track.getTrackSection(trains[0].currentSection).at(trains[0].currentNode);
+	
 
 	
 
@@ -359,7 +354,7 @@ int main() {
 
 			if (keys[GLFW_KEY_SPACE]) {
 				if (trains[i].velocity > 0.01) {
-					trains[i].velocity -= 0.007;
+					trains[i].velocity -= 0.01;
 
 				}
 				else {
@@ -368,7 +363,7 @@ int main() {
 						trains[i].velocity = 0;
 					}
 					else {
-						trains[i].velocity += 0.007;
+						trains[i].velocity += 0.01;
 
 					}
 
@@ -573,32 +568,7 @@ int main() {
 		}
 		SortParticles();
 
-		// Simulate all particles
-		for (int i = 0; i<MaxParticlesTrain; i++) {
-
-			GameObject& p = ParticlesContainerTrain[i]; // shortcut
-
-			if (p.life > 0.0f) {
-
-				// Decrease life
-				p.life -= deltaTime;
-				if (p.life > 0.0f) {
-
-					// Simulate simple physics : gravity only, no collisions
-					p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
-					p.position += p.speed * (float)deltaTime; 
-					p.cameradistance = glm::length2(p.position - CameraPosition);
-					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
-					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, trains[0].position)));
-					p.model.Draw(ourShader);
-				}
-				else {
-					// Particles that just died will be put at the end of the buffer in SortParticles();
-					p.cameradistance = -1.0f;
-				}
-			}
-		}
-		SortParticlesTrain();
+	
 
 		ourShader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
 
@@ -780,13 +750,12 @@ int main() {
 
 			}
 
-			translation = glm::rotate(translation, trains[i].getDeltaRotation() - 90.0f, glm::vec3(0, 1, 0));
+			translation = glm::rotate(translation, trains[i].rotationTarget - 90.0f, glm::vec3(0, 1, 0));
 
 
 			glm::mat4 offset = glm::translate(glm::mat4(), trains[i].offset);
 
 			output = translation * offset;
-
 
 			ourShader.setVec3("material.specular", levelData.getObjectShininess(trains[i].gameObjectIndex), levelData.getObjectShininess(trains[i].gameObjectIndex), levelData.getObjectShininess(trains[i].gameObjectIndex));
 			ourShader.setFloat("material.shininess", 64.0f);
@@ -797,8 +766,47 @@ int main() {
 
 
 
+
+
+
+			if (i == 0) { // Just do this once per tick
+
+			// Simulate all particles
+				for (int i = 0; i < MaxParticlesTrain; i++) {
+
+					GameObject& p = ParticlesContainerTrain[i]; // shortcut
+
+					if (p.life > 0.0f) {
+
+						// Decrease life
+						p.life -= deltaTime;
+						if (p.life > 0.0f) {
+
+							// Simulate simple physics : gravity only, no collisions
+							p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
+							p.position += p.speed * (float)deltaTime;
+							p.cameradistance = glm::length2(p.position - CameraPosition);
+							p.translationMatrix = glm::translate(translation, p.position + glm::vec3(1.8, 0.2, -0.2));
+							//glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, trains[0].position)));
+							glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(p.translationMatrix));
+
+							p.model.Draw(ourShader);
+						}
+						else {
+							// Particles that just died will be put at the end of the buffer in SortParticles();
+							p.cameradistance = -1.0f;
+						}
+					}
+				}
+				SortParticlesTrain();
+
+			}
+
 		}
 
+
+
+		
 			/************************************/
 			/*************************************/
 			/*************************************/
