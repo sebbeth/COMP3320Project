@@ -159,12 +159,13 @@ int main() {
 	for (int i = 0; i<MaxParticles; i++) {
 		ParticlesContainer[i].life = -1.0f;
 		ParticlesContainer[i].cameradistance = -1.0f;
-		ParticlesContainer[i].model.load("models/particle.obj");
+		//ParticlesContainer[i].model.load("models/particle.obj");
+		ParticlesContainer[i].model.load("models/smoke.obj");
 	}
 
 	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
 	glm::vec3 particlePosition = glm::vec3(0,0,0);
-	glm::vec3 particleOffsetPosition = glm::vec3(-57.3f, 1.0f, 40.9f);
+	glm::vec3 particleOffsetPosition = glm::vec3(-58.7f, 2.0f, 40.5f);
 	glm::mat4 defaultTranslationMatrix = ParticlesContainer[0].translationMatrix;
 
 	GLfloat lastFrame = glfwGetTime();
@@ -209,7 +210,7 @@ int main() {
 		for (int i = 0; i < newparticles; i++) {
 			int particleIndex = FindUnusedParticle();
 			GameObject& p = ParticlesContainer[particleIndex];
-			p.life = 1.0f; // This particle will live 5 seconds.
+			p.life = 2.0f; // This particle will live 5 seconds.
 			p.specular = 0.0f;
 			p.position = particlePosition;
 			p.translationMatrix = defaultTranslationMatrix;
@@ -244,6 +245,7 @@ int main() {
 
 
 			p.size = (rand() % 1000) / 2000.0f + 0.1f;
+
 			//particlePosition += glm::vec3(0.0f, 5.0f, 0.0f);
 		}
 
@@ -276,6 +278,7 @@ int main() {
 				levelData.getModel(i).Draw(ourShader);
 			}
 		}
+		ourShader.setVec3("light.specular", 0.0f, 0.0f, 0.0f);
 
 		// Simulate all particles
 		int ParticlesCount = 0;
@@ -294,7 +297,6 @@ int main() {
 					p.position += p.speed * (float)deltaTime; 
 					p.cameradistance = glm::length2(p.position - CameraPosition);
 					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
-					//glm::scale(p.translationMatrix, p.size * glm::vec3(10.0f,10.0f,10.0f));
 					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, particleOffsetPosition)));
 					p.model.Draw(ourShader);
 				}
@@ -309,6 +311,7 @@ int main() {
 		}
 		SortParticles();
 
+		ourShader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
 
 		/* Don't update color or depth. */
 		glDisable(GL_DEPTH_TEST);
