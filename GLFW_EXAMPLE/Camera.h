@@ -100,7 +100,7 @@ public:
 
 		}
 
-		std::cout << "(" << this->position.x << "," << this->position.y << "," << this->position.z << ")" << std::endl;
+	//	std::cout << "(" << this->position.x << "," << this->position.y << "," << this->position.z << ")" << std::endl;
 	}
 
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.

@@ -106,9 +106,11 @@
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="shader_m.h" />
     <ClInclude Include="Track.h" />
+    <ClInclude Include="TrackOld.h" />
     <ClInclude Include="TrackSegmentStraight.h" />
   </ItemGroup>
   <ItemGroup>

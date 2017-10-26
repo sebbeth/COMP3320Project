@@ -64,7 +64,52 @@ public:
 	}
 
 	
+	vector<glm::vec3> getVertices() {
 
+		// Walk through each of the mesh's vertices
+	/*
+		for (GLuint i = 0; i < mesh->mNumVertices; i++)
+		{
+			Vertex vertex;
+			glm::vec3 vector; // We declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+
+							  // Positions
+			vector.x = mesh->mVertices[i].x;
+			vector.y = mesh->mVertices[i].y;
+			vector.z = mesh->mVertices[i].z;
+
+
+
+		}
+		*/
+		vector<glm::vec3> output;
+
+			for (int i = 0; i < this->meshes.size(); i++)
+			{
+				for (int j = 0; j < this->meshes.at(i).vertices.size(); j++)
+				{
+
+					
+
+					glm::vec3 vector; 
+
+					vector.x = meshes.at(i).vertices.at(j).Position.x;
+					vector.y = meshes.at(i).vertices.at(j).Position.y;
+					vector.z = meshes.at(i).vertices.at(j).Position.z;
+
+					output.push_back(vector);
+
+					std::cout << "(" << vector.x <<
+						"," << vector.y <<
+						"," << vector.z << ")" << std::endl;
+				}
+
+			}
+
+
+			return output;
+
+	}
 
 
 private:
@@ -114,6 +159,8 @@ private:
 		}
 	}
 
+	
+
 	Mesh processMesh(aiMesh *mesh, const aiScene *scene)
 	{
 		// Data to fill
@@ -133,6 +180,7 @@ private:
 			vector.y = mesh->mVertices[i].y;
 			vector.z = mesh->mVertices[i].z;
 			vertex.Position = vector;
+
 
 			// Normals
 
