@@ -54,6 +54,8 @@ void DoMovement();
 
 //Default Camera Variables
 Camera camera(glm::vec3(0.0f, 80.0f, 450.0f));
+//Camera camera(glm::vec3(0.0f, 80.0f, 80.0f));
+
 GLfloat lastX = WIDTH / 2.0f;
 GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
@@ -125,8 +127,8 @@ glm::vec3 getDirectonVector(glm::vec3 position, glm::vec3 target) {
 }
 
 //Particles
-const int MaxParticles = 50;
-const int MaxParticlesTrain = 25;
+const int MaxParticles = 20; //50 25
+const int MaxParticlesTrain = 20;
 GameObject ParticlesContainer[MaxParticles];
 GameObject ParticlesContainerTrain[MaxParticlesTrain];
 int LastUsedParticle = 0;
@@ -257,9 +259,17 @@ int main() {
 	trains[0].currentSection = 2;
 	trains[0].currentNode = 80;
 	trains[0].gameObjectIndex = 6;
+	trains[0].offset = glm::vec3(0.8, 0.1, 0.8);
 	trains[0].position = track.getTrackSection(trains[0].currentSection).at(trains[0].currentNode);
 	
-
+	
+	/*
+	trains[1].currentSection = 2;
+	trains[1].currentNode = 82;
+	trains[1].gameObjectIndex = 5;
+	trains[1].offset = glm::vec3(0.8, -0.1, 0);
+	trains[1].position = track.getTrackSection(trains[1].currentSection).at(trains[1].currentNode);
+	*/
 	
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
@@ -785,7 +795,7 @@ int main() {
 							p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
 							p.position += p.speed * (float)deltaTime;
 							p.cameradistance = glm::length2(p.position - CameraPosition);
-							p.translationMatrix = glm::translate(translation, p.position + glm::vec3(1.8, 0.5, -0.2));
+							p.translationMatrix = glm::translate(translation, p.position + glm::vec3(1.8, 0.6, -0.2));
 							//glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, trains[0].position)));
 							glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(p.translationMatrix));
 

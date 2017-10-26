@@ -20,7 +20,7 @@ public:
 		currentRotation = 0;
 		velocity = 0.0;
 		maxVelocity = 0.7;
-		offset = glm::vec3(0.8, 0, 0.8);
+		//offset = glm::vec3(0.8, 0, 0.8);
 	}
 
 	glm::vec3 getIteratedPosition(glm::vec3 nextNode) {
