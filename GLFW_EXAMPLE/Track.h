@@ -122,11 +122,21 @@ public:
 		sections.push_back(p1);
 		sections.push_back(p2);
 		*/
-		nextSectionLookupForward.push_back(1); // 0 -> 1
-		nextSectionLookupForward.push_back(0); // 1 -> 0
+		nextSectionLookupForward.push_back(3); // 0 -> 3
+		nextSectionLookupForward.push_back(3); // 1 -> 3
+		nextSectionLookupForward.push_back(-1); // 2 -> nill
+		nextSectionLookupForward.push_back(4); // 3 -> 4
+		nextSectionLookupForward.push_back(6); // 4 -> 6
+		nextSectionLookupForward.push_back(6); // 5 -> 6
+		nextSectionLookupForward.push_back(1); // 6 -> 0
 
-	
-
+		nextSectionLookupBack.push_back(3); // 0 -> 3
+		nextSectionLookupBack.push_back(3); // 1 -> 3
+		nextSectionLookupBack.push_back(-1); // 2 -> nill
+		nextSectionLookupBack.push_back(4); // 3 -> 4
+		nextSectionLookupBack.push_back(6); // 4 -> 6
+		nextSectionLookupBack.push_back(6); // 5 -> 6
+		nextSectionLookupBack.push_back(0); // 6 -> 0
 
 
 
@@ -136,6 +146,10 @@ public:
 	int getNextSection(int currentTrack, int direction) {
 
 
+		if (direction == 1) {
+
+			return nextSectionLookupForward.at(currentTrack);
+		}
 
 	}
 
@@ -149,7 +163,7 @@ public:
 
 	vector<glm::vec3> getTrackSection(int i) {
 
-		return sections.at(3);
+		return sections.at(i);
 	}
 	
 

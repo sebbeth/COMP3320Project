@@ -7,6 +7,7 @@ public:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	int currentNode;
+	int currentSection;
 	GLfloat velocity;
 	GLfloat maxVelocity;
 
@@ -15,6 +16,7 @@ public:
 		currentNode = 0;
 		velocity = 0.0;
 		maxVelocity = 0.7;
+		currentSection = 3;
 	}
 
 	glm::vec3 getIteratedPosition(glm::vec3 nextNode) {
