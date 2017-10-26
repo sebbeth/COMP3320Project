@@ -165,7 +165,7 @@ Track track;
 
 
 
-PhysicsObject train(glm::vec3(-59.008778, -21.538118, -19.200142));
+PhysicsObject train(glm::vec3(-82.138649, - 20.348156, 11.300604));
 
 
 /********* /TEST **********/
@@ -286,6 +286,7 @@ int main() {
 
 
 	// BULLET
+
 
 
 
@@ -615,25 +616,29 @@ int main() {
 		
 			if (train.velocity >= 0) { // Going forward
 
-				if (vertexEquality(train.position, track.getTrackSection(0).at(train.currentNode + 1))) {
+				if (vertexEquality(train.position, track.getTrackSection(train.currentSection).at(train.currentNode + 1))) {
 
 					std::cout << "Next" << endl;
 					train.currentNode++;
 
-					if (train.currentNode == track.getTrackSection(0).size() - 1) {
+					if (train.currentNode == track.getTrackSection(train.currentSection).size() - 1) {
+						std::cout << "END" << endl;
+						train.currentSection = track.getNextSection(train.currentSection, 1);
+						std::cout << "New " << train.currentSection <<  endl;
 						train.currentNode = 0;
+
 					}
 				}
 			}
 			else { // Going backward
 
-				if (vertexEquality(train.position, track.getTrackSection(0).at(train.currentNode - 1))) {
+				if (vertexEquality(train.position, track.getTrackSection(train.currentSection).at(train.currentNode - 1))) {
 
 					std::cout << "Prev" << endl;
 					train.currentNode--;
 
 					if (train.currentNode == 0) {
-						train.currentNode = track.getTrackSection(0).size() - 1;
+						train.currentNode = track.getTrackSection(train.currentSection).size() - 1;
 					}
 				}
 			}
@@ -658,11 +663,11 @@ int main() {
 
 			glm::mat4 direction = glm::lookAt(
 				glm::vec3(0, 0, 0),
-				train.getRotation(track.getTrackSection(0).at(train.currentNode + 4)),
+				train.getRotation(track.getTrackSection(train.currentSection).at(train.currentNode + 1)),
 				glm::vec3(0, 1, 0)
 			);
 
-			glm::mat4 translation = glm::translate(glm::mat4(), train.getIteratedPosition(track.getTrackSection(0).at(train.currentNode + 1)));
+			glm::mat4 translation = glm::translate(glm::mat4(), train.getIteratedPosition(track.getTrackSection(train.currentSection).at(train.currentNode + 1)));
 
 			glm::mat4 output =  translation * direction;
 
