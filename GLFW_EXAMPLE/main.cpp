@@ -155,12 +155,27 @@ int main() {
 
 
 	static GLfloat* g_particule_position_size_data = new GLfloat[MaxParticles * 4];
-
+	int modelNo = 1;
 	for (int i = 0; i<MaxParticles; i++) {
 		ParticlesContainer[i].life = -1.0f;
 		ParticlesContainer[i].cameradistance = -1.0f;
 		//ParticlesContainer[i].model.load("models/particle.obj");
-		ParticlesContainer[i].model.load("models/smoke.obj");
+		if (modelNo == 1) {
+			ParticlesContainer[i].model.load("models/smoke1.obj");
+			modelNo++;
+		}
+		else if (modelNo == 2) {
+			ParticlesContainer[i].model.load("models/smoke2.obj");
+			modelNo++;
+		}
+		else if (modelNo == 3) {
+			ParticlesContainer[i].model.load("models/smoke3.obj");
+			modelNo++;
+		}
+		else{
+			ParticlesContainer[i].model.load("models/smoke4.obj"); 
+			modelNo = 1;
+		}
 	}
 
 	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
@@ -210,7 +225,7 @@ int main() {
 		for (int i = 0; i < newparticles; i++) {
 			int particleIndex = FindUnusedParticle();
 			GameObject& p = ParticlesContainer[particleIndex];
-			p.life = 2.0f; // This particle will live 5 seconds.
+			p.life = 1.5f; // This particle will live 5 seconds.
 			p.specular = 0.0f;
 			p.position = particlePosition;
 			p.translationMatrix = defaultTranslationMatrix;
