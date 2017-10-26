@@ -140,7 +140,6 @@ private:
 			
 			if (mesh->mNormals == NULL) 
 			{
-				cout << "Error getting normals for mesh" << endl;
 			} else {
 				vector.x = mesh->mNormals[i].x;
 				vector.y = mesh->mNormals[i].y;

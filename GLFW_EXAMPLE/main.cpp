@@ -160,8 +160,10 @@ int main() {
 		ParticlesContainer[i].model.load("models/arrow.obj");
 	}
 
-	glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
-	
+	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
+	glm::vec3 particlePosition = glm::vec3(0,0,0);
+	glm::vec3 particleOffsetPosition = glm::vec3(-57.3f, 1.0f, 40.9f);
+
 	GLfloat lastFrame = glfwGetTime();
 	
 	//Game Loop
@@ -198,14 +200,14 @@ int main() {
 		// Generate 10 new particule each millisecond,
 		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
 		// newparticles will be huge and the next frame even longer.
-		int newparticles = (int)(deltaTime*1000.0);
+		int newparticles = (int)(deltaTime*100.0);
 		if (newparticles > (int)(0.016f*1000.0))
 			newparticles = (int)(0.016f*1000.0);
 
 		for (int i = 0; i < newparticles; i++) {
 			int particleIndex = FindUnusedParticle();
 			GameObject& p = ParticlesContainer[particleIndex];
-			p.life = 30.0f; // This particle will live 5 seconds.
+			p.life = 1.0f; // This particle will live 5 seconds.
 			p.specular = 0.0f;
 			p.position = particlePosition;
 			p.thetaRotation = 0.0f;
@@ -213,8 +215,8 @@ int main() {
 			p.orientationVector = glm::vec3(0, 1.0f, 0);
 
 
-			float spread = 1.5f;
-			glm::vec3 maindir = glm::vec3(0.0f, 10.0f, 0.0f);
+			float spread = 0.3f;
+			glm::vec3 maindir = glm::vec3(0.0f, 0.1f, 0.0f);
 			// Very bad way to generate a random direction; 
 			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
 			// combined with some user-controlled parameters (main direction, spread, etc)
@@ -228,11 +230,11 @@ int main() {
 			);
 			*/
 			glm::vec3 randomdir = glm::vec3(
-				(rand() % 2000 - 100.0f) / 400.0f,
+				(rand() % 2000 - 100.0f) / 8000.0f,
 				//0.0f,
-				(rand() % 2000 - 100.0f) / 400.0f,
+				(rand() % 2000 - 100.0f) / 80000.0f,
 				//0.0f
-				(rand() % 2000 - 100.0f) / 400.0f
+				(rand() % 2000 - 100.0f) / 8000.0f
 			);
 
 			p.speed = maindir + randomdir*spread;
@@ -285,12 +287,11 @@ int main() {
 				if (p.life > 0.0f) {
 
 					// Simulate simple physics : gravity only, no collisions
-					p.speed += glm::vec3(0.0f, -9.81f, 0.0f) * (float)deltaTime * 0.01f;
+					p.speed += glm::vec3(0.0f, -9.0f, 0.01f) * (float)deltaTime * 0.01f; //-9.81
 					p.position += p.speed * (float)deltaTime; 
 					p.cameradistance = glm::length2(p.position - CameraPosition);
 					p.translationMatrix = glm::translate(p.translationMatrix, p.position); 
-					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(p.translationMatrix));
-					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::rotate(p.translationMatrix, p.rotation, p.orientationVector)));
+					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, particleOffsetPosition)));
 					p.model.Draw(ourShader);
 				}
 				else {
