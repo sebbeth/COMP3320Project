@@ -138,6 +138,8 @@ int main() {
 	glBindVertexArray(VertexArrayID);
 
 	Shader ourShader("shaders/4.1.lighting_maps.vs", "shaders/4.1.lighting_maps.fs");
+	Shader particleShader("shaders/core.vs", "shaders/core.frag");
+
 
 	// Load the level data object, it contans all the data for the game's initial state.
 
@@ -157,7 +159,7 @@ int main() {
 	for (int i = 0; i<MaxParticles; i++) {
 		ParticlesContainer[i].life = -1.0f;
 		ParticlesContainer[i].cameradistance = -1.0f;
-		ParticlesContainer[i].model.load("models/arrow.obj");
+		ParticlesContainer[i].model.load("models/particle.obj");
 	}
 
 	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
