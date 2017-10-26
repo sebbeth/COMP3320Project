@@ -189,6 +189,7 @@ private:
 			if (mesh->mNormals == NULL) 
 			{
 
+        
 			} else {
 				vector.x = mesh->mNormals[i].x;
 				vector.y = mesh->mNormals[i].y;

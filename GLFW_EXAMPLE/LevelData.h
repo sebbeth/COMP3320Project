@@ -37,6 +37,15 @@ struct GameObject {
 	TrackOld *track;
 	int segmentOnTrack;
 	double positionOnSegment;
+	//Particles
+	float life;
+	float cameradistance;
+	float size;
+	glm::vec3 speed;
+	bool operator<(const GameObject& that) const {
+		// Sort in reverse order : far particles drawn first.
+		return this->cameradistance > that.cameradistance;
+	}
 };
 
 const int cardinality = 20;
@@ -219,6 +228,7 @@ public:
 
 
 		loadObject(5, "models/CoalHopper.obj", glm::vec3(-6, -10.8, 77.1), 0.0f);
+		loadObject(4, "models/SteamEngine.obj", track->segments[0]->pointA, 0.0f);
 
 		loadObject(6, "models/SteamEngine.obj", glm::vec3(0,0,0), 0.0f);
 
@@ -341,6 +351,7 @@ public:
 
 	Model getModel(int id) 
 	{
+		return objects[id].model;
 		return objects[id].model;
 	}
 

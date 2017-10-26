@@ -42,7 +42,9 @@
 	
 #include "btBulletDynamicsCommon.h"
 
-const GLint WIDTH = 1000, HEIGHT = 800;
+
+const GLint WIDTH = 1280, HEIGHT = 720;
+
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 //Camera Movement
@@ -60,7 +62,7 @@ bool startSequence = false;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
-GLfloat lastFrame = 0.0f;
+//GLfloat lastFrame = 0.0f;
 
 // lighting
 glm::vec3 lightPos(36.0, 200, 200);
@@ -203,6 +205,35 @@ glm::vec3 getDirectonVector(glm::vec3 position, glm::vec3 target) {
 
 }
 
+//Particles
+const int MaxParticles = 100;
+GameObject ParticlesContainer[MaxParticles];
+int LastUsedParticle = 0;
+
+// Finds a Particle in ParticlesContainer which isn't used yet.
+// (i.e. life < 0);
+int FindUnusedParticle() {
+
+	for (int i = LastUsedParticle; i<MaxParticles; i++) {
+		if (ParticlesContainer[i].life < 0) {
+			LastUsedParticle = i;
+			return i;
+		}
+	}
+
+	for (int i = 0; i<LastUsedParticle; i++) {
+		if (ParticlesContainer[i].life < 0) {
+			LastUsedParticle = i;
+			return i;
+		}
+	}
+
+	return 0; // All particles are taken, override the first one
+}
+
+void SortParticles() {
+	std::sort(&ParticlesContainer[0], &ParticlesContainer[MaxParticles]);
+}
 
 
 int main() {
@@ -292,21 +323,23 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
 
 	Shader ourShader("shaders/4.1.lighting_maps.vs", "shaders/4.1.lighting_maps.fs");
+	Shader particleShader("shaders/core.vs", "shaders/core.frag");
+
 
 	// Load the level data object, it contans all the data for the game's initial state.
 
 	LevelData levelData;
-
-
-
 
 
 	/**** LOAD TRACKS */
@@ -330,6 +363,22 @@ int main() {
 		camera.startFlyIn();
 	}
 
+
+	static GLfloat* g_particule_position_size_data = new GLfloat[MaxParticles * 4];
+
+	for (int i = 0; i<MaxParticles; i++) {
+		ParticlesContainer[i].life = -1.0f;
+		ParticlesContainer[i].cameradistance = -1.0f;
+		ParticlesContainer[i].model.load("models/particle.obj");
+	}
+
+	//glm::vec3 particlePosition = glm::vec3(-58.0f,0.0f, 40.0f);
+	glm::vec3 particlePosition = glm::vec3(0,0,0);
+	glm::vec3 particleOffsetPosition = glm::vec3(-57.3f, 1.0f, 40.9f);
+	glm::mat4 defaultTranslationMatrix = ParticlesContainer[0].translationMatrix;
+
+	GLfloat lastFrame = glfwGetTime();
+	
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
 		GLfloat currentFrame = glfwGetTime();
@@ -376,16 +425,66 @@ int main() {
 
 		/**************************************************/
 		// Do object movement
-
 	
 		//levelData.moveAlongTrack(4, 0.1);
 		//levelData.moveAlongTrack(5, 0.1);
 
-
-
 		//render
 		glClearColor(0.47f, 0.67f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
+		glm::vec3 CameraPosition(glm::inverse(view)[3]);
+		glm::mat4 ViewProjectionMatrix = ProjectionMatrix * view;
+
+		// Generate 10 new particule each millisecond,
+		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
+		// newparticles will be huge and the next frame even longer.
+		int newparticles = (int)(deltaTime*100.0);
+		if (newparticles > (int)(0.016f*100.0))
+			newparticles = (int)(0.016f*100.0);
+
+		for (int i = 0; i < newparticles; i++) {
+			int particleIndex = FindUnusedParticle();
+			GameObject& p = ParticlesContainer[particleIndex];
+			p.life = 1.0f; // This particle will live 5 seconds.
+			p.specular = 0.0f;
+			p.position = particlePosition;
+			p.translationMatrix = defaultTranslationMatrix;
+			p.thetaRotation = 0.0f;
+			p.rotation = 0.0f;
+			p.orientationVector = glm::vec3(0, 1.0f, 0);
+
+
+			float spread = 0.3f;
+			glm::vec3 maindir = glm::vec3(1.0f, 1.0f, 1.0f);
+			// Very bad way to generate a random direction; 
+			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
+			// combined with some user-controlled parameters (main direction, spread, etc)
+			/*
+			glm::vec3 randomdir = glm::vec3(
+				(rand() % 2000 - 100.0f) / 100.0f,
+				//0.0f,
+				(rand() % 2000 - 100.0f) / 100.0f,
+				//0.0f
+				(rand() % 2000 - 100.0f) / 100.0f
+			);
+			*/
+			glm::vec3 randomdir = glm::vec3(
+				(rand() % 4000 - 1000.0f) / 800.0f,
+				//0.0f,
+				(rand() % 4000 - 1000.0f) / 800.0f,
+				//0.0f
+				(rand() % 4000 - 1000.0f) / 800.0f
+			);
+
+			p.speed = maindir + randomdir*spread;
+
+
+			p.size = (rand() % 1000) / 2000.0f + 0.1f;
+			//particlePosition += glm::vec3(0.0f, 5.0f, 0.0f);
+		}
 
 		ourShader.Use();
 		ourShader.setVec3("light.position", lightPos);
@@ -396,14 +495,11 @@ int main() {
 		ourShader.setVec3("light.diffuse", 0.7f, 0.7f, 0.5f);
 		ourShader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
 
-
-		glm::mat4 view = camera.GetViewMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
+
 		//Draw all the loaded models within the game EXCEPT mountianTop
-
-
 		glEnable(GL_DEPTH_TEST);
 
 		for (size_t i = 1; i < levelData.getCardinality(); i++)
@@ -419,6 +515,39 @@ int main() {
 				levelData.getModel(i).Draw(ourShader);
 			}
 		}
+
+		// Simulate all particles
+		int ParticlesCount = 0;
+		for (int i = 0; i<MaxParticles; i++) {
+
+			GameObject& p = ParticlesContainer[i]; // shortcut
+
+			if (p.life > 0.0f) {
+
+				// Decrease life
+				p.life -= deltaTime;
+				if (p.life > 0.0f) {
+
+					// Simulate simple physics : gravity only, no collisions
+					p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
+					p.position += p.speed * (float)deltaTime; 
+					p.cameradistance = glm::length2(p.position - CameraPosition);
+					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
+					//glm::scale(p.translationMatrix, p.size * glm::vec3(10.0f,10.0f,10.0f));
+					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, particleOffsetPosition)));
+					p.model.Draw(ourShader);
+				}
+				else {
+					// Particles that just died will be put at the end of the buffer in SortParticles();
+					p.cameradistance = -1.0f;
+				}
+
+				ParticlesCount++;
+
+			}
+		}
+		SortParticles();
+
 
 		/* Don't update color or depth. */
 		glDisable(GL_DEPTH_TEST);
@@ -451,18 +580,18 @@ int main() {
 
 
 		// Now draw the reflection
-			glm::mat4 model = glm::scale(
-				glm::translate(levelData.getObjectPositioning(3), glm::vec3(0, -40, 0)),
-				glm::vec3(1, -1, 1)
-			);
+		glm::mat4 model = glm::scale(
+			glm::translate(levelData.getObjectPositioning(3), glm::vec3(0, -40, 0)),
+			glm::vec3(1, -1, 1)
+		);
 
-			ourShader.setVec3("material.specular", levelData.getObjectShininess(3), levelData.getObjectShininess(3), levelData.getObjectShininess(3));
-			ourShader.setFloat("material.shininess", 64.0f);
-			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		ourShader.setVec3("material.specular", levelData.getObjectShininess(3), levelData.getObjectShininess(3), levelData.getObjectShininess(3));
+		ourShader.setFloat("material.shininess", 64.0f);
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
-			levelData.getModel(3).Draw(ourShader);
+		levelData.getModel(3).Draw(ourShader);
 
-		
+
 
 		glDisable(GL_STENCIL_TEST);
 
@@ -471,12 +600,12 @@ int main() {
 		// Lastly, draw the top of the world
 		glEnable(GL_DEPTH_TEST);
 
-			ourShader.setVec3("material.specular", levelData.getObjectShininess(0), levelData.getObjectShininess(0), levelData.getObjectShininess(0));
-			ourShader.setFloat("material.shininess", 64.0f);
-			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(0)));
-			glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(0)));
+		ourShader.setVec3("material.specular", levelData.getObjectShininess(0), levelData.getObjectShininess(0), levelData.getObjectShininess(0));
+		ourShader.setFloat("material.shininess", 64.0f);
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(0)));
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(0)));
 
-			levelData.getModel(0).Draw(ourShader);
+		levelData.getModel(0).Draw(ourShader);
 
 			/*************************************/
 			/*************************************/
@@ -553,10 +682,14 @@ int main() {
 		// DRAW the frame
 
 		view = camera.GetViewMatrix();
-
+		
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
+
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		
 
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -565,6 +698,7 @@ int main() {
 
 		//DRAW OPENGL
 		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 

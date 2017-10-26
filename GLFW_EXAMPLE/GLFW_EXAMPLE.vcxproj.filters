@@ -18,6 +18,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleShader.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="kitten.png">
@@ -55,6 +58,12 @@
     <None Include="shaders\4.1.lighting_maps.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Particle.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Particle.fs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -85,6 +94,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Track.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
