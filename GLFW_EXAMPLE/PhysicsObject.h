@@ -11,18 +11,17 @@ public:
 	GLfloat velocity;
 	GLfloat maxVelocity;
 
-	PhysicsObject(glm::vec3 initialPosition) {
-		this->position = initialPosition;
+	PhysicsObject() {
 		currentNode = 0;
 		velocity = 0.0;
 		maxVelocity = 0.7;
-		currentSection = 3;
 	}
 
 	glm::vec3 getIteratedPosition(glm::vec3 nextNode) {
 
+
 		
-		position = position + (getDirectonVector(position, nextNode) * velocity);
+		position = position + (getDirectonVector(position, nextNode) * abs( velocity));
 
 
 

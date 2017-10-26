@@ -18,18 +18,12 @@ public:
 	vector<int> nextSectionLookupForward;
 	vector<int> nextSectionLookupBack;
 	vector<TrackSwitch> trackSwitches;
+	vector<TrackSwitch> backwardTrackSwitches;
 
 
 
 	Track() {
 
-		nextSectionLookupForward.push_back(3); // 0 -> 3
-		nextSectionLookupForward.push_back(3); // 1 -> 3
-		nextSectionLookupForward.push_back(-1); // 2 -> nill
-		nextSectionLookupForward.push_back(2); // 3 -> 4
-		nextSectionLookupForward.push_back(6); // 4 -> 6
-		nextSectionLookupForward.push_back(6); // 5 -> 6
-		nextSectionLookupForward.push_back(1); // 6 -> 0
 
 		TrackSwitch t0;
 		t0.incoming = 0;
@@ -84,15 +78,60 @@ public:
 		trackSwitches.push_back(t7);
 
 
-	
 
-		nextSectionLookupBack.push_back(3); // 0 -> 3
-		nextSectionLookupBack.push_back(3); // 1 -> 3
-		nextSectionLookupBack.push_back(-1); // 2 -> nill
-		nextSectionLookupBack.push_back(4); // 3 -> 4
-		nextSectionLookupBack.push_back(6); // 4 -> 6
-		nextSectionLookupBack.push_back(6); // 5 -> 6
-		nextSectionLookupBack.push_back(0); // 6 -> 0
+
+
+		TrackSwitch b0;
+		b0.incoming = 0;
+		b0.outgoingA = 6;
+		b0.outgoingB = 6;
+
+		TrackSwitch b1;
+		b1.incoming = 1;
+		b1.outgoingA = 6;
+		b1.outgoingB = 6;
+
+		TrackSwitch b2;
+		b2.incoming = 2;
+		b2.outgoingA = 3;
+		b2.outgoingB = 3;
+
+		TrackSwitch b3;
+		b3.incoming = 3;
+		b3.outgoingA = 0;
+		b3.outgoingB = 1;
+
+
+		TrackSwitch b4;
+		b4.incoming = 4;
+		b4.outgoingA = 3;
+		b4.outgoingB = 3;
+
+		TrackSwitch b5;
+		b5.incoming = 5;
+		b5.outgoingA = 4;
+		b5.outgoingB = 4;
+
+		TrackSwitch b6;
+		b6.incoming = 6;
+		b6.outgoingA = 5;
+		b6.outgoingB = 7;
+
+		TrackSwitch b7;
+		b7.incoming = 7;
+		b7.outgoingA = 4;
+		b7.outgoingB = 4;
+
+
+
+		backwardTrackSwitches.push_back(b0);
+		backwardTrackSwitches.push_back(b1);
+		backwardTrackSwitches.push_back(b2);
+		backwardTrackSwitches.push_back(b3);
+		backwardTrackSwitches.push_back(b4);
+		backwardTrackSwitches.push_back(b5);
+		backwardTrackSwitches.push_back(b6);
+		backwardTrackSwitches.push_back(b7);
 
 
 
@@ -111,6 +150,17 @@ public:
 				return trackSwitches.at(currentTrack).outgoingB;
 
 			}
+		}
+		else {
+
+			if (backwardTrackSwitches.at(currentTrack).selected == 0) {
+				return backwardTrackSwitches.at(currentTrack).outgoingA;
+			}
+			else {
+				return backwardTrackSwitches.at(currentTrack).outgoingB;
+
+			}
+
 		}
 
 	}
@@ -134,9 +184,13 @@ public:
 
 		trackSwitches.at(currentSection).selected = selection;
 
-		std::cout << "Switch " << currentSection << ":" << selection << ":" << endl;
+		} else{
+
+			backwardTrackSwitches.at(currentSection).selected = selection;
 
 		}
+		std::cout << "Switch " << currentSection << ":" << selection << ":" << endl;
+
 
 	}
 	
