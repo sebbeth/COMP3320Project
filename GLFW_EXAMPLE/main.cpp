@@ -477,7 +477,7 @@ int main() {
 
 
 			float spread = 0.3f;
-			glm::vec3 maindir = glm::vec3(1.0f, 1.0f, 1.0f);
+			glm::vec3 maindir = glm::vec3(-1.0f, 1.0f, -1.0f);
 			// Very bad way to generate a random direction; 
 			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
 			// combined with some user-controlled parameters (main direction, spread, etc)
@@ -551,7 +551,7 @@ int main() {
 
 					// Simulate simple physics : gravity only, no collisions
 					p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
-					p.position += p.speed * (float)deltaTime; 
+					p.position += p.speed * (float)deltaTime * 0.1f; 
 					p.cameradistance = glm::length2(p.position - CameraPosition);
 					p.translationMatrix = glm::translate(p.translationMatrix, p.position);
 					glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, particleOffsetPosition)));
@@ -750,7 +750,7 @@ int main() {
 
 			}
 
-			translation = glm::rotate(translation, trains[i].rotationTarget - 90.0f, glm::vec3(0, 1, 0));
+			translation = glm::rotate(translation, trains[i].rotationTarget + 90.0f, glm::vec3(0, 1, 0));
 
 
 			glm::mat4 offset = glm::translate(glm::mat4(), trains[i].offset);
@@ -786,7 +786,7 @@ int main() {
 							p.speed += glm::vec3(0.0f, 2.0f, 0.01f) * (float)deltaTime * 0.1f; //-9.81
 							p.position += p.speed * (float)deltaTime;
 							p.cameradistance = glm::length2(p.position - CameraPosition);
-							p.translationMatrix = glm::translate(translation, p.position + glm::vec3(1.8, 0.2, -0.2));
+							p.translationMatrix = glm::translate(translation, p.position + glm::vec3(1.8, 0.5, -0.2));
 							//glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, trains[0].position)));
 							glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(p.translationMatrix));
 
