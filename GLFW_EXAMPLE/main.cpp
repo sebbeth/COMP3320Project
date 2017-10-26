@@ -40,7 +40,7 @@
 #include "PhysicsObject.h"
 #include "Track.h"
 	
-#include "btBulletDynamicsCommon.h"
+//#include "btBulletDynamicsCommon.h"
 
 
 const GLint WIDTH = 1280, HEIGHT = 720;

@@ -119,15 +119,6 @@
     <ClInclude Include="TrackSegmentStraight.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="bullet\src\BulletCollision\BulletCollision.vcxproj">
-      <Project>{1c1aa3c1-4a9a-3851-96ab-381c1eee7c51}</Project>
-    </ProjectReference>
-    <ProjectReference Include="bullet\src\BulletDynamics\BulletDynamics.vcxproj">
-      <Project>{b7ab1960-5983-3fcf-9e7e-3f3c12bb275f}</Project>
-    </ProjectReference>
-    <ProjectReference Include="bullet\src\LinearMath\LinearMath.vcxproj">
-      <Project>{7b152c48-e3ae-3596-9e22-dea7bc5f8cfd}</Project>
-    </ProjectReference>
     <ProjectReference Include="soil\projects\VC9\SOIL.vcxproj">
       <Project>{c32fb2b4-500c-43cd-a099-eecce079d3f1}</Project>
     </ProjectReference>
