@@ -228,7 +228,6 @@ public:
 
 
 		loadObject(5, "models/CoalHopper.obj", glm::vec3(-6, -10.8, 77.1), 0.0f);
-		loadObject(4, "models/SteamEngine.obj", track->segments[0]->pointA, 0.0f);
 
 		loadObject(6, "models/SteamEngine.obj", glm::vec3(0,0,0), 0.0f);
 
