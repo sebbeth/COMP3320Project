@@ -1,3 +1,12 @@
+/*
+	COMP3320
+	Project: Low Poly Train Simulation
+	Final Module 1
+	File name: TrackSegmentStraight.h
+	Students:
+		Jack Ratcliffe 3236537
+		Sebastian Brown 3220619
+*/
 #pragma once
 
 #include <GL/glew.h>

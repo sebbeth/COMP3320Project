@@ -1,7 +1,7 @@
 /*
 	COMP3320
-	Project: Trains
-	Module 1
+	Project: Low Poly Train Simulation
+	Final Module 1
 	File name: Camera.h
 	Students:
 		Jack Ratcliffe 3236537

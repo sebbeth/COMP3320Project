@@ -1,12 +1,12 @@
 /*
 	COMP3320
-	Project: Trains
-	Module 1
+	Project: Low Poly Train Simulation
+	Final Module
 	File name: main.cpp
 	Students:
 		Jack Ratcliffe 3236537
 		Sebastian Brown 3220619
-	Description: This is the first module in our attempt to make a low poly sandbox game.
+	Description: This is the final module in our attempt to make a low poly sandbox game.
 */
 	
 //Library for loading textures (Simple OpenGL Image Library)
@@ -64,7 +64,6 @@ bool startSequence = false;
 
 //Time starts at 0
 GLfloat deltaTime = 0.0f;
-//GLfloat lastFrame = 0.0f;
 
 // lighting
 glm::vec3 lightPos(36.0, 200, 200);
@@ -185,10 +184,6 @@ void SortParticlesTrain() {
 
 int main() {
 
-
-
-
-
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -222,8 +217,6 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -233,16 +226,13 @@ int main() {
 	glBindVertexArray(VertexArrayID);
 
 	Shader ourShader("shaders/4.1.lighting_maps.vs", "shaders/4.1.lighting_maps.fs");
-	Shader particleShader("shaders/core.vs", "shaders/core.frag");
 
 
 	// Load the level data object, it contans all the data for the game's initial state.
 
 	LevelData levelData;
 
-
 	/**** LOAD TRACKS */
-
 
 	track.addSection(levelData.objects[11].model.getVertices());
 	track.addSection(levelData.objects[12].model.getVertices());
@@ -252,25 +242,12 @@ int main() {
 	track.addSection(levelData.objects[16].model.getVertices());
 	track.addSection(levelData.objects[17].model.getVertices());
 	track.addSection(levelData.objects[18].model.getVertices());
-
-
-	
 	
 	trains[0].currentSection = 2;
 	trains[0].currentNode = 80;
 	trains[0].gameObjectIndex = 6;
 	trains[0].offset = glm::vec3(0.8, 0.1, 0.8);
 	trains[0].position = track.getTrackSection(trains[0].currentSection).at(trains[0].currentNode);
-	
-	
-	/*
-	trains[1].currentSection = 2;
-	trains[1].currentNode = 82;
-	trains[1].gameObjectIndex = 5;
-	trains[1].offset = glm::vec3(0.8, -0.1, 0);
-	trains[1].position = track.getTrackSection(trains[1].currentSection).at(trains[1].currentNode);
-	*/
-	
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
@@ -279,7 +256,6 @@ int main() {
 	{
 		camera.startFlyIn();
 	}
-
 
 	static GLfloat* g_particule_position_size_data = new GLfloat[MaxParticles * 4];
 	int modelNo = 1;
@@ -340,19 +316,11 @@ int main() {
 
 		for (int i = 0; i < numberOfTrains; i++)
 		{
-
 			if (keys[GLFW_KEY_MINUS]) {
-
-				
 					trains[i].velocity += 0.01;
-
 					if (abs(trains[i].velocity) >= trains[i].maxVelocity) {
 						trains[i].velocity = trains[i].maxVelocity;
 					}
-			
-			
-
-
 			}
 			if (keys[GLFW_KEY_EQUAL]) {
 				trains[i].velocity -= 0.01;
@@ -360,11 +328,9 @@ int main() {
 					trains[i].velocity = -trains[i].maxVelocity;
 				}
 			}
-
 			if (keys[GLFW_KEY_SPACE]) {
 				if (trains[i].velocity > 0.01) {
 					trains[i].velocity -= 0.01;
-
 				}
 				else {
 
@@ -373,9 +339,7 @@ int main() {
 					}
 					else {
 						trains[i].velocity += 0.01;
-
 					}
-
 				}
 			}
 		}
@@ -403,9 +367,6 @@ int main() {
 
 		/**************************************************/
 		// Do object movement
-	
-		//levelData.moveAlongTrack(4, 0.1);
-		//levelData.moveAlongTrack(5, 0.1);
 
 		particleOffsetPositionTrain = levelData.objects[4].position;
 		//render
@@ -417,9 +378,6 @@ int main() {
 		glm::vec3 CameraPosition(glm::inverse(view)[3]);
 		glm::mat4 ViewProjectionMatrix = ProjectionMatrix * view;
 
-		// Generate 10 new particule each millisecond,
-		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
-		// newparticles will be huge and the next frame even longer.
 		int newparticles = (int)(deltaTime*100.0);
 		if (newparticles > (int)(0.016f*100.0))
 			newparticles = (int)(0.016f*100.0);
@@ -438,18 +396,6 @@ int main() {
 
 			float spread = 0.3f;
 			glm::vec3 maindir = glm::vec3(1.0f, 1.0f, 1.0f);
-			// Very bad way to generate a random direction; 
-			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
-			// combined with some user-controlled parameters (main direction, spread, etc)
-			/*
-			glm::vec3 randomdir = glm::vec3(
-				(rand() % 2000 - 100.0f) / 100.0f,
-				//0.0f,
-				(rand() % 2000 - 100.0f) / 100.0f,
-				//0.0f
-				(rand() % 2000 - 100.0f) / 100.0f
-			);
-			*/
 			glm::vec3 randomdir = glm::vec3(
 				(rand() % 4000 - 1000.0f) / 800.0f,
 				//0.0f,
@@ -462,13 +408,8 @@ int main() {
 
 
 			p.size = (rand() % 1000) / 2000.0f + 0.1f;
-
-			//particlePosition += glm::vec3(0.0f, 5.0f, 0.0f);
 		}
 
-		// Generate 10 new particule each millisecond,
-		// but limit this to 16 ms (60 fps), or if you have 1 long frame (1sec),
-		// newparticles will be huge and the next frame even longer.
 		int newparticlesTrain = (int)(deltaTime*100.0);
 		if (newparticlesTrain > (int)(0.016f*100.0))
 			newparticlesTrain = (int)(0.016f*100.0);
@@ -487,18 +428,6 @@ int main() {
 
 			float spread = 0.3f;
 			glm::vec3 maindir = glm::vec3(-1.0f, 1.0f, -1.0f);
-			// Very bad way to generate a random direction; 
-			// See for instance http://stackoverflow.com/questions/5408276/python-uniform-spherical-distribution instead,
-			// combined with some user-controlled parameters (main direction, spread, etc)
-			/*
-			glm::vec3 randomdir = glm::vec3(
-				(rand() % 2000 - 100.0f) / 100.0f,
-				//0.0f,
-				(rand() % 2000 - 100.0f) / 100.0f,
-				//0.0f
-				(rand() % 2000 - 100.0f) / 100.0f
-			);
-			*/
 			glm::vec3 randomdir = glm::vec3(
 				(rand() % 4000 - 1000.0f) / 800.0f,
 				//0.0f,
@@ -511,8 +440,6 @@ int main() {
 
 
 			p.size = (rand() % 1000) / 2000.0f + 0.1f;
-
-			//particlePosition += glm::vec3(0.0f, 5.0f, 0.0f);
 		}
 
 		ourShader.Use();
@@ -527,7 +454,6 @@ int main() {
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-
 		//Draw all the loaded models within the game EXCEPT mountianTop
 		glEnable(GL_DEPTH_TEST);
 
@@ -539,7 +465,6 @@ int main() {
 				ourShader.setVec3("material.specular", levelData.getObjectShininess(i), levelData.getObjectShininess(i), levelData.getObjectShininess(i));
 				ourShader.setFloat("material.shininess", 64.0f);
 				glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectPositioning(i)));
-			//	glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(levelData.getObjectRotation(i)));
 
 				levelData.getModel(i).Draw(ourShader);
 			}
@@ -711,32 +636,8 @@ int main() {
 					}
 				}
 			}
-
-			// Generate the transition matrix from position
-			// transitionMatrix = glm::lookAt(train.position,( train.getIteratedPosition(track1->path.at(train.currentNode + 1)) * scale), glm::vec3(0, 1, 0));
-
-			/*
-			glm::mat4 transitionMatrix = glm::lookAt(train.position,train.position + track1->path.at(train.currentNode + 1), glm::vec3(0, 10, 0));
-
-			 transitionMatrix = glm::translate(transitionMatrix, train.getIteratedPosition(track1->path.at(train.currentNode + 1)));
-			 */
-			 /*
-			 glm::mat4 direction = glm::lookAt(
-				 train.position,
-				 train.position + track1->path.at(train.currentNode + 1),
-				 glm::vec3(0, 10, 0)
-			 );*/
 			glm::mat4 output = glm::mat4();
 			glm::mat4  direction = glm::mat4();
-			if (safeNodeLookup(trains[i].currentNode + 1, trains[i].currentSection)) { //train.currentSection != -1
-				/*
-				direction = glm::lookAt(
-					glm::vec3(0, 0, 0),
-					trains[i].getRotation(track.getTrackSection(trains[i].currentSection).at(trains[i].currentNode + 1)),
-					glm::vec3(0, 1, 0)
-				);*/
-
-			}
 			glm::mat4 translation;
 
 			if (trains[0].velocity >= 0) {
@@ -773,11 +674,6 @@ int main() {
 
 			levelData.getModel(trains[i].gameObjectIndex).Draw(ourShader);
 
-
-
-
-
-
 			if (i == 0) { // Just do this once per tick
 
 			// Simulate all particles
@@ -796,7 +692,6 @@ int main() {
 							p.position += p.speed * (float)deltaTime;
 							p.cameradistance = glm::length2(p.position - CameraPosition);
 							p.translationMatrix = glm::translate(translation, p.position + glm::vec3(1.8, 0.6, -0.2));
-							//glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(glm::translate(p.translationMatrix, trains[0].position)));
 							glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(p.translationMatrix));
 
 							p.model.Draw(ourShader);
@@ -812,9 +707,6 @@ int main() {
 			}
 
 		}
-
-
-
 		
 			/************************************/
 			/*************************************/

@@ -1,3 +1,12 @@
+/*
+	COMP3320
+	Project: Low Poly Train Simulation
+	Final Module 1
+	File name: LevelData.h
+	Students:
+		Jack Ratcliffe 3236537
+		Sebastian Brown 3220619
+*/
 #pragma once
 
 #pragma once
@@ -19,7 +28,6 @@
 #include <math.h> 
 
 #include "Model.h";
-//#include "TrackSegmentStraight.h"
 #include "TrackOld.h"
 
 struct GameObject {
@@ -50,10 +58,6 @@ struct GameObject {
 
 const int cardinality = 30;
 
-//Track *track;
-//Track *track2;
-//Track *track3;
-
 class LevelData
 {
 public:
@@ -63,13 +67,9 @@ public:
 
 	LevelData() {
 
-
-
 		// x, z, -y
 
 		//Ground object
-
-		//-7.1f, 10.55f, -6.1f
 		loadObject(0, "models/mountian6.obj", glm::vec3(0,0,0), 0.0f); // Terrain model is offset from zero by this magic value -7.1f, 10.55f, -6.1f so that the scene can be designed in Blender
 		loadObject(1, "models/mountianBottom.obj", glm::vec3(-0,0,0), 0.0f);
 
@@ -91,21 +91,7 @@ public:
 		loadObject(16, "models/6.obj", glm::vec3(10, 0, 0), 0.0f);
 		loadObject(17, "models/7.obj", glm::vec3(10, 0, 0), 0.0f);
 		loadObject(18, "models/8.obj", glm::vec3(10, 0, 0), 0.0f);
-
-
-		/*
-		objects[4].track = track;
-		objects[4].segmentOnTrack = 0;
-		objects[4].thetaRotation = 0.0f;
-
-		objects[5].track = track;
-		objects[5].segmentOnTrack = 0;
-		objects[5].thetaRotation = 0.0f;
-		*/
 	
-
-
-
 	}
 
 	float getNewRotationValue(float theta, float rotation) {

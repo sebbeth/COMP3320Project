@@ -18,50 +18,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleShader.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="kitten.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\core.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\core.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\2.1.lamp.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\2.1.basic_lighting.fs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\2.1.basic_lighting.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\2.1.lamp.fs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\4.1.lamp.fs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shaders\4.1.lamp.vs">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="shaders\4.1.lighting_maps.fs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="shaders\4.1.lighting_maps.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Particle.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Particle.fs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -73,9 +35,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LevelData.h">
@@ -94,12 +53,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Track.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Particle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

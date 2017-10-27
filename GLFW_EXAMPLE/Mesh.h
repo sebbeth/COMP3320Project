@@ -1,8 +1,8 @@
 /*
 	COMP3320
-	Project: Trains
-	Module 1
-	File name: Model.h
+	Project: Low Poly Train Simulation
+	Final Module
+	File name: Mesh.h
 	Students:
 		Jack Ratcliffe 3236537
 		Sebastian Brown 3220619
