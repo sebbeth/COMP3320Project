@@ -61,7 +61,7 @@ GLfloat lastY = WIDTH / 2.0f;
 bool keys[1024];
 bool firstMouse = true;
 bool startSequence = false;
-bool particles = false;
+bool particles = true;
 int cameraMode = 0;
 
 //Time starts at 0
@@ -348,9 +348,6 @@ int main() {
 		glfwPollEvents();
 		DoMovement();
 
-	//	for (int i = 0; i < numberOfTrains; i++)
-	//	{
-
 			if (keys[GLFW_KEY_MINUS]) {
 
 				
@@ -396,6 +393,14 @@ int main() {
 
 		if (keys[GLFW_KEY_2]) {
 			track.changeUpcomingSwitch(trains[0].velocity, trains[0].currentSection, 0);
+		}
+
+
+		if (keys[GLFW_KEY_I]) {
+			cameraMode = 1;
+		}
+		if (keys[GLFW_KEY_O]) {
+			cameraMode = 0;
 		}
 
 
@@ -863,25 +868,34 @@ int main() {
 
 //Takes a directional key press and moves camera accordingly
 void DoMovement() {
-	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP]) {
-		camera.ProcessKeyboard(FORWARD, deltaTime);
-	}
-	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN]) {
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
-	}
-	if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT]) {
-		camera.ProcessKeyboard(LEFT, deltaTime);
-	}
-	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) {
-		camera.ProcessKeyboard(RIGHT, deltaTime);
-	}
-	
-	//lightPos = camera.position;
 
-	// Camera fly in sequence
-	if (startSequence)
-	{
-		camera.updateFlyIn(deltaTime);
+	if (cameraMode == 0) {
+		if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP]) {
+			camera.ProcessKeyboard(FORWARD, deltaTime);
+		}
+		if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN]) {
+			camera.ProcessKeyboard(BACKWARD, deltaTime);
+		}
+		if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT]) {
+			camera.ProcessKeyboard(LEFT, deltaTime);
+		}
+		if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) {
+			camera.ProcessKeyboard(RIGHT, deltaTime);
+		}
+
+		//lightPos = camera.position;
+
+		// Camera fly in sequence
+		if (startSequence)
+		{
+			camera.updateFlyIn(deltaTime);
+
+		}
+	}
+	else if (cameraMode == 1) {
+
+
+		camera.position = trains[0].position + glm::vec3(0,1.4,0); // Offset
 
 	}
 }
