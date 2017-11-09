@@ -82,6 +82,8 @@ public:
 		loadObject(5, "models/CoalHopper.obj", glm::vec3(0,0,0), 0.0f);
 
 		loadObject(6, "models/SteamEngine.obj", glm::vec3(0,0,0), 0.0f);
+		loadObject(7, "models/SteamEngine.obj", glm::vec3(0, 0, 0), 0.0f);
+
 
 		loadObject(11, "models/1.obj", glm::vec3(10, 0, 0), 0.0f);
 		loadObject(12, "models/2.obj", glm::vec3(10, 0, 0), 0.0f);
